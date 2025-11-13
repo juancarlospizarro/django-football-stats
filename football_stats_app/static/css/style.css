@@ -1,0 +1,47 @@
+ /* Aplicamos la fuente y el color principal del prototipo */
+        body {
+            font-family: 'Inter', sans-serif;
+            color: #504847; /* Tu 'foot-darkgray' */
+            
+            /* Configuración para el "sticky footer" */
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Hacemos que el contenido principal crezca para empujar el footer hacia abajo */
+        main {
+            flex-grow: 1;
+        }
+
+        /* Clases personalizadas con colores corporativos */
+        .bg-foot-green {
+            background-color: #27a770;
+        }
+        
+        .text-foot-green {
+            color: #27a770;
+        }
+
+        /* Botón personalizado para "Registrarse" como en tu prototipo */
+        .btn-foot-register {
+            background-color: #ffffff;
+            color: #27a770;
+            font-weight: 600;
+            border: 1px solid #ffffff;
+        }
+        .btn-foot-register:hover {
+            background-color: #f8f9fa; /* Un gris muy claro al pasar el ratón */
+            color: #27a770;
+            border-color: #f8f9fa;
+        }
+        
+        /* Ajustes para los iconos del footer */
+        .footer-social-icon {
+            font-size: 1.5rem; /* 24px */
+            color: white;
+            transition: color 0.2s;
+        }
+        .footer-social-icon:hover {
+            color: #dddddd; /* Un blanco más suave al pasar el ratón */
+        }

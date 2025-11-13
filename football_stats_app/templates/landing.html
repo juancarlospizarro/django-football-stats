@@ -1,0 +1,93 @@
+{% extends "includes/base.html" %}
+{% load static %}
+{% block title %}FootManager - Inicio{% endblock %}
+{% block content %}
+<div class="container my-5">
+
+            <!-- Sección Título -->
+            <section class="text-center col-lg-8 mx-auto mb-5 py-5">
+                <h1 class="display-4 fw-bold text-foot-darkgray mb-3">FootManager</h1>
+                <p class="fs-5 text-secondary">
+                    Diseñada para equipos de fútbol amateur y semiprofesionales que permite gestionar
+                    de manera eficiente el rendimiento de jugadores y equipos a través de herramientas
+                    avanzadas de análisis de datos.
+                </p>
+            </section>
+
+            <!-- Sección de Características -->
+            <section class="space-y-20">
+                
+                <!-- 1. Gestiona tu equipo -->
+                <div class="row g-5 align-items-center mb-5 pb-5">
+                    <div class="col-md-6 text-center text-md-start">
+                        <h2 class="display-6 fw-bold text-foot-green mb-3">Gestiona tu equipo</h2>
+                        <p class="fs-5 text-secondary">
+                            Gestione de forma sencilla e intuitiva su
+                            equipo de fútbol y recoja toda la
+                            información en un solo lugar.
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <img src="{% static 'img/pexels-pixabay-262524.jpg' %}" 
+                            alt="Entrenador dando una charla a su equipo" 
+                            class="img-fluid rounded-3 shadow-lg w-100">
+                    </div>
+                </div>
+
+                <!-- 2. Recoge información (Layout alterno) -->
+                <div class="row g-5 align-items-center mb-5 pb-5">
+                    <!-- Usamos order-md-2 para que el texto aparezca a la derecha en escritorio -->
+                    <div class="col-md-6 order-md-2 text-center text-md-start">
+                        <h2 class="display-6 fw-bold text-foot-green mb-3">Recoge información de los partidos</h2>
+                        <p class="fs-5 text-secondary">
+                            Recopile y guarde toda la información
+                            acerca de los partidos que dispute su
+                            equipo.
+                        </p>
+                    </div>
+                    <div class="col-md-6 order-md-1">
+                        <img src="{% static 'img/pexels-expressivestanley-3148452.jpg' %}" 
+                            alt="Jugadores disputando un balón en un partido de fútbol" 
+                            class="img-fluid rounded-3 shadow-lg w-100">
+                    </div>
+                </div>
+
+                <!-- 3. Analiza los datos -->
+                <div class="row g-5 align-items-center mb-5 pb-5">
+                    <div class="col-md-6 text-center text-md-start">
+                        <h2 class="display-6 fw-bold text-foot-green mb-3">Analiza los datos y toma decisiones</h2>
+                        <p class="fs-5 text-secondary">
+                            Analice los datos recogidos de todos los
+                            partidos de su equipo y obtenga
+                            insights que le ayuden a tomar
+                            decisiones.
+                        </S>
+                    </div>
+                    <div class="col-md-6">
+                        <img src="{% static 'img/pexels-kampus-8941611.jpg' %}" 
+                            alt="Entrenador analizando datos en una tablet" 
+                            class="img-fluid rounded-3 shadow-lg w-100">
+                    </div>
+                </div>
+
+                <!-- 4. Recibe avisos -->
+                <div class="row g-5 align-items-center mb-5 pb-5">
+                    <div class="col-md-6 order-md-2 text-center text-md-start">
+                        <h2 class="display-6 fw-bold text-foot-green mb-3">Recibe avisos sobre eventos que ocurran en tu equipo</h2>
+                        <p class="fs-5 text-secondary">
+                            Reciba avisos sobre lo que ocurre en su
+                            equipo. Desde eventos nuevos en su
+                            calendario hasta sanciones y lesiones.
+                        </p>
+                    </div>
+                    <div class="col-md-6 order-md-1">
+                        <img src="{% static 'img/_90191864_news-alerts-article-1.jpg' %}" 
+                            alt="Móvil mostrando una notificación de la aplicación" 
+                            class="img-fluid rounded-3 shadow-lg w-100">
+                    </div>
+                </div>
+
+            </section>
+        </div>
+
+{% endblock %}

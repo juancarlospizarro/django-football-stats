@@ -1,0 +1,61 @@
+{% extends "includes/base.html" %}
+{% block title %}FootManager - Registrarse{% endblock %}
+{% load static %}
+{% block content %}
+<main class="d-flex align-items-center py-5">
+        <div class="container">
+            <div class="row justify-content-center">
+                <!-- Ajustamos el ancho del formulario -->
+                <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+                    
+                    <!-- Títulos -->
+                    <div class="text-center mb-4">
+                        <h1 class="h2 fw-bold text-foot-darkgray">FootManager</h1>
+                        <p class="text-secondary">Introduzca la información para registrarse</p>
+                    </div>
+
+                    <!-- Tarjeta del Formulario -->
+                    <div class="card shadow-sm rounded-4 border-0">
+                        <div class="card-body p-4 p-md-5">
+                            
+                            <form method="POST">
+                                {% csrf_token %}
+
+                                <!-- Campo Email -->
+                                <div class="mb-3">
+                                    <label for="emailInput" class="form-label fw-medium">Correo electrónico</label>
+                                    <input type="email" class="form-control form-control-lg rounded-3" id="emailInput" name="email" required>
+                                </div>
+                                
+                                <!-- Campo Contraseña -->
+                                <div class="mb-3">
+                                    <label for="passwordInput" class="form-label fw-medium">Contraseña</label>
+                                    <input type="password" class="form-control form-control-lg rounded-3" id="passwordInput" name="password" required>
+                                </div>
+                                
+                                <!-- Checkbox "Entrenador" -->
+                                <div class="form-check mb-4">
+                                    <input class="form-check-input" type="checkbox" value="true" id="checkEntrenador" name="es_entrenador">
+                                    <label class="form-check-label" for="checkEntrenador">
+                                        Entrenador
+                                    </label>
+                                    <div class="form-text mt-1">
+                                        Marca esta casilla en caso de que quieras registrarte como entrenador
+                                    </div>
+                                </div>
+
+                                <!-- Botón de Enviar -->
+                                <div class="d-grid">
+                                    <button type="submit" class="btn btn-foot-primary btn-lg w-100 rounded-3">Registrarse</button>
+                                </div>
+                                
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </main>
+
+    {% endblock %}

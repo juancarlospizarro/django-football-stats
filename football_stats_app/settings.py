@@ -30,7 +30,7 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = True
 
 
-ALLOWED_HOSTS_ENV = os.getenv("ALLOWED_HOSTS")
+ALLOWED_HOSTS_ENV = os.getenv("ALLOWED_HOSTS", "")
 
 ALLOWED_HOSTS = ALLOWED_HOSTS_ENV.split(',')
 

@@ -62,7 +62,7 @@ ROOT_URLCONF = 'football_stats_app.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],
+        'DIRS': [BASE_DIR / 'football_stats_app' / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

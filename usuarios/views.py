@@ -1,4 +1,7 @@
 from django.shortcuts import render
+from django.urls import reverse_lazy
+from django.contrib.auth.views import PasswordResetView
+from django.contrib.messages.views import SuccessMessageMixin
 
 def login(request):
     return render(request, 'usuarios/login.html')
@@ -6,8 +9,8 @@ def login(request):
 def signin(request):
     return render(request, 'usuarios/signin.html')
 
-def password_forget(request):
-    return render(request, 'usuarios/password_forget.html')
-
-def new_password(request):
-    return render(request, 'usuarios/new_password.html')
+class ResetPasswordView(SuccessMessageMixin, PasswordResetView):
+    template_name = 'usuarios/password_forget.html'
+    email_template_name = 'usuarios/password_forget_email.html'
+    subject_template_name = 'usuarios/password_forget_subject.txt'
+    success_url = reverse_lazy('usuarios:password_reset_done')

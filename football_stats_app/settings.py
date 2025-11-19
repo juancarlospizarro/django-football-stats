@@ -27,7 +27,7 @@ load_dotenv()
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 
 ALLOWED_HOSTS_ENV = os.getenv("ALLOWED_HOSTS", "")
@@ -142,3 +142,19 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# Activar el backend SMTP
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+# Servidor SMTP de alwaysdata
+EMAIL_HOST = 'smtp-footmanager.alwaysdata.net'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True  # siempre que el puerto sea 587
+
+# Credenciales de tu cuenta de alwaysdata
+EMAIL_HOST_USER = 'footmanager@alwaysdata.net'
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
+
+# Dirección desde la que se enviarán los correos
+DEFAULT_FROM_EMAIL = 'footmanager@alwaysdata.net'

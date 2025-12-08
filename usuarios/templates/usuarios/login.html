@@ -1,6 +1,6 @@
 {% extends "includes/base.html" %}
 {% load static %}
-{% block title %}FootManager - Iniciar sesión{% endblock %}
+{% block title %}FutDataManager - Iniciar sesión{% endblock %}
 {% block content %}
 <main class="d-flex align-items-center py-5">
         <div class="container">
@@ -10,7 +10,7 @@
                     
                     <!-- Títulos -->
                     <div class="text-center mb-4">
-                        <h1 class="h2 fw-bold text-foot-darkgray">FootManager</h1>
+                        <h1 class="h2 fw-bold text-foot-darkgray">FutDataManager</h1>
                         <p class="text-secondary">Introduzca la información para iniciar sesión</p>
                     </div>
 
@@ -39,7 +39,7 @@
                                 
                                 <!-- Enlace de recuperar contraseña -->
                                 <div class="text-center">
-                                    <a href="{% url 'usuarios:password_reset' %}" class="text-decoration-none text-secondary small">¿No recuerdas tu contraseña?</a>
+                                    <a href="{% url 'usuarios:password_forget' %}" class="text-decoration-none text-secondary small">¿No recuerdas tu contraseña?</a>
                                 </div>
                             </form>
                         </div>

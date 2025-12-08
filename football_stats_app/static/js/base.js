@@ -1,3 +1,4 @@
+document.getElementById("anio_actual").innerHTML = new Date().getFullYear();
 const html = document.documentElement;
     const button = document.getElementById("themeToggle");
 

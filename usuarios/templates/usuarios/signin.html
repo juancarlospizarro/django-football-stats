@@ -1,5 +1,5 @@
 {% extends "includes/base.html" %}
-{% block title %}FootManager - Registrarse{% endblock %}
+{% block title %}FutDataManager - Registrarse{% endblock %}
 {% load static %}
 {% block content %}
 <main class="d-flex align-items-center py-5">
@@ -10,7 +10,7 @@
                     
                     <!-- Títulos -->
                     <div class="text-center mb-4">
-                        <h1 class="h2 fw-bold text-foot-darkgray">FootManager</h1>
+                        <h1 class="h2 fw-bold text-foot-darkgray">FutDataManager</h1>
                         <p class="text-secondary">Introduzca la información para registrarse</p>
                     </div>
 
@@ -30,7 +30,12 @@
                                 <!-- Campo Contraseña -->
                                 <div class="mb-3">
                                     <label for="passwordInput" class="form-label fw-medium">Contraseña</label>
-                                    <input type="password" class="form-control form-control-lg rounded-3" id="passwordInput" name="password" required>
+                                    <input type="password" class="form-control form-control-lg rounded-3" id="passwordInput" name="password1" required>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="passwordInput" class="form-label fw-medium">Repita su contraseña</label>
+                                    <input type="password" class="form-control form-control-lg rounded-3" id="passwordInput" name="password2" required>
                                 </div>
                                 
                                 <!-- Checkbox "Entrenador" -->

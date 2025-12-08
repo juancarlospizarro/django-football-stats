@@ -1,9 +1,11 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-bs-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Aplicación web para gestionar y analizar el rendimiento de tu equipo de fútbol de forma sencilla y dinámica.">
+    <meta name="keywords" content="footmanager, football, soccer, fútbol, análisis de datos, equipo">
     <title>{% block title %}{% endblock %}</title>
     <link rel="icon" type="image/x-icon" href="{% static 'img/logo.png' %}">
     
@@ -33,5 +35,6 @@
 
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" xintegrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="{% static 'js/base.js' %}"></script>
 </body>
 </html>

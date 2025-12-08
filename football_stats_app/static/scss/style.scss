@@ -1,0 +1,69 @@
+@import "../node_modules/bootstrap/scss/bootstrap";
+
+$fuente-principal: 'Inter', sans-serif;
+$color-principal: #27a770;
+$color-secundario: #504847;
+$color-terciario: #ffffff;
+$color-cuaternario: #f8f9fa;
+
+
+ /* Aplicamos la fuente y el color principal del prototipo */
+        body {
+            font-family: $fuente_principal;
+            color: $color-secundario; /* Tu 'foot-darkgray' */
+            
+            /* Configuración para el "sticky footer" */
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Hacemos que el contenido principal crezca para empujar el footer hacia abajo */
+        main {
+            flex-grow: 1;
+        }
+
+        /* Clases personalizadas con colores corporativos */
+        .bg-foot-green {
+            background-color: $color-principal;
+        }
+        
+        .text-foot-green {
+            color: $color-principal;
+        }
+
+        /* Botón personalizado para "Registrarse" como en tu prototipo */
+        .btn-foot-form-enviar {
+            background-color: $color-principal;
+            color: $color-terciario;
+            font-weight: 600;
+            border: 1px solid $color-principal;
+        }
+        .btn-foot-form-enviar:hover {
+            background-color: $color-terciario; /* Un gris muy claro al pasar el ratón */
+            color: $color-principal;
+            border-color: $color-principal;
+        }
+
+        /* Botón personalizado para "Registrarse" como en tu prototipo */
+        .btn-foot-register-header {
+            background-color: #ffffff;
+            color: $color-principal;
+            font-weight: 600;
+            border: 1px solid #ffffff;
+        }
+        .btn-foot-register-header:hover {
+            background-color: #f8f9fa; /* Un gris muy claro al pasar el ratón */
+            color: $color-principal;
+            border-color: #f8f9fa;
+        }
+        
+        /* Ajustes para los iconos del footer */
+        .footer-social-icon {
+            font-size: 1.5rem; /* 24px */
+            color: white;
+            transition: color 0.2s;
+        }
+        .footer-social-icon:hover {
+            color: #dddddd; /* Un blanco más suave al pasar el ratón */
+        }

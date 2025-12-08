@@ -1,0 +1,1 @@
+document.getElementById("anio_actual").innerHTML = new Date().getFullYear();

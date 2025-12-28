@@ -32,14 +32,14 @@
 
         {% if user.tiene_equipo %}
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'equipo:dashboard' %}">Mi equipo</a>
+                <a class="nav-link" href="">Mi equipo</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'equipo:jugadores' %}">Jugadores</a>
+                <a class="nav-link" href="">Jugadores</a>
             </li>
         {% else %}
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'equipo:crear' %}">Crear equipo</a>
+                <a class="nav-link" href="">Crear equipo</a>
             </li>
         {% endif %}
 
@@ -48,14 +48,14 @@
 
         {% if user.tiene_equipo %}
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'jugador:equipo' %}">Mi equipo</a>
+                <a class="nav-link" href="">Mi equipo</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'jugador:stats' %}">Mis estadísticas</a>
+                <a class="nav-link" href="">Mis estadísticas</a>
             </li>
         {% else %}
             <li class="nav-item">
-                <a class="nav-link" href="{% url 'jugador:buscar_equipo' %}">
+                <a class="nav-link" href="">
                     Buscar equipo
                 </a>
             </li>
@@ -71,7 +71,7 @@
             {% if user.foto %}
                 <img src="{{ user.foto.url }}" class="rounded-circle me-2" width="40" height="40">
             {% else %}
-                <img src="{% static 'img/default-avatar.png' %}" class="rounded-circle me-2" width="40" height="40">
+                <img src="{% static 'img/default-avatar.jpg' %}" class="rounded-circle me-2" width="40" height="40">
             {% endif %}
 
             {{ user.first_name }}
@@ -80,7 +80,7 @@
 
         <ul class="dropdown-menu dropdown-menu-end">
             <li>
-                <a class="dropdown-item" href="{% url 'usuarios:perfil' %}">
+                <a class="dropdown-item" href="">
                     Mi perfil
                 </a>
             </li>

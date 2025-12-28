@@ -4,7 +4,7 @@ from django.contrib.auth.views import PasswordResetView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.views import PasswordResetConfirmView
 from django.shortcuts import render, redirect
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate, logout
 from .models import Usuario, PerfilJugador, PerfilEntrenador
 
 def login_view(request):
@@ -85,6 +85,9 @@ def signin(request):
             # Si pasa algo raro, mostramos el error (útil en desarrollo)
             return render(request, 'usuarios/signin.html', {'error': f"Error al registrar: {str(e)}"})
 
+def logout_view(request):
+    logout(request)
+    return redirect('landing')  # o 'usuarios:login'
 
 class ResetPasswordView(SuccessMessageMixin, PasswordResetView):
     template_name = 'usuarios/password_forget.html'

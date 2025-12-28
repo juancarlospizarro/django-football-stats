@@ -167,3 +167,6 @@ LOGIN_REDIRECT_URL = '/'
 
 # Cuando te deslogueas, también vas a la raíz (landing de invitado)
 LOGOUT_REDIRECT_URL = '/'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'

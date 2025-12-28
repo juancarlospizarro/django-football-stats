@@ -9,6 +9,7 @@ app_name = 'usuarios'
 urlpatterns = [
     path('login/', views.login_view, name="login"),
     path('signin/', views.signin, name="signin"),
+    path('logout/', views.logout_view, name='logout'),
 
     # Enviar email
     path('password_forget/', 

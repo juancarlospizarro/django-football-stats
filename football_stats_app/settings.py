@@ -161,3 +161,9 @@ DEFAULT_FROM_EMAIL = 'footmanager@alwaysdata.net'
 
 
 AUTH_USER_MODEL = 'usuarios.Usuario'
+
+# Cuando te logueas, vas a la raíz (que ahora es tu vista inteligente)
+LOGIN_REDIRECT_URL = '/' 
+
+# Cuando te deslogueas, también vas a la raíz (landing de invitado)
+LOGOUT_REDIRECT_URL = '/'

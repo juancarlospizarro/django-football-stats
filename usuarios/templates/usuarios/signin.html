@@ -18,8 +18,45 @@
                     <div class="card shadow-sm rounded-4 border-0">
                         <div class="card-body p-4 p-md-5">
                             
-                            <form method="POST">
+                            <!-- Mostramos errores si los hay -->
+                        {% if error %}
+                            <div class="alert alert-danger" role="alert">
+                                {{ error }}
+                            </div>
+                        {% endif %}
+                        
+                            <form method="POST" enctype="multipart/form-data">
                                 {% csrf_token %}
+
+                                <!-- Campo Nombre -->
+                                <div class="mb-3">
+                                    <label for="nombre" class="form-label fw-medium">Nombre</label>
+                                    <input type="text" class="form-control form-control-lg rounded-3" id="nombre" name="nombre" required>
+                                </div>
+
+                                <!-- Campo Apellidos -->
+                                <div class="mb-3">
+                                    <label for="apellidos" class="form-label fw-medium">Apellidos</label>
+                                    <input type="text" class="form-control form-control-lg rounded-3" id="apellidos" name="apellidos" required>
+                                </div>
+
+                                <!-- Campo Teléfono -->
+                                <div class="mb-3">
+                                    <label for="telefono" class="form-label fw-medium">Teléfono</label>
+                                    <input type="text" class="form-control form-control-lg rounded-3" id="telefono" name="telefono" required>
+                                </div>
+
+                                <!-- Campo Fecha Nacimiento -->
+                                <div class="mb-3">
+                                    <label for="fechanacimiento" class="form-label fw-medium">Fecha de Nacimiento</label>
+                                    <input type="date" class="form-control form-control-lg rounded-3" id="fechanacimiento" name="fechanacimiento" required>
+                                </div>
+
+                                <!-- Campo Foto -->
+                                <div class="mb-3">
+                                    <label for="foto" class="form-label fw-medium">Foto de perfil</label>
+                                    <input type="file" class="form-control form-control-lg rounded-3" id="foto" name="foto" accept="image/*">
+                                </div>
 
                                 <!-- Campo Email -->
                                 <div class="mb-3">

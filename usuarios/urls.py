@@ -7,7 +7,7 @@ from . import views
 app_name = 'usuarios'
 
 urlpatterns = [
-    path('login/', views.login, name="login"),
+    path('login/', views.login_view, name="login"),
     path('signin/', views.signin, name="signin"),
 
     # Enviar email

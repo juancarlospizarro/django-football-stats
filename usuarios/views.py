@@ -7,8 +7,22 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
 from .models import Usuario, PerfilJugador, PerfilEntrenador
 
-def login(request, user):
-    return render(request, 'usuarios/login.html')
+def login_view(request):
+    if request.method == "GET":
+        return render(request, 'usuarios/login.html')
+
+    # POST → procesar login
+    email = request.POST.get('email')
+    password = request.POST.get('password')
+
+    # Autenticación
+    user = authenticate(request, username=email, password=password)
+
+    if user is not None:
+        login(request, user)
+        return redirect('landing')  # o dashboard
+    else:
+        return render(request, 'usuarios/login.html', {'error': "El usuario no existe o la contraseña es incorrecta."})
 
 def signin(request):
     if request.method == "GET":

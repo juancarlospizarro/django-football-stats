@@ -17,6 +17,15 @@
                     <!-- Tarjeta del Formulario -->
                     <div class="card shadow-sm rounded-4 border-0">
                         <div class="card-body p-4 p-md-5">
+
+                             <!-- Mostramos errores si los hay -->
+                        {% if error %}
+                            <div class="alert alert-danger" role="alert">
+                                {{ error }}
+                            </div>
+                        {% endif %}
+
+                        
                             <form method="POST">
                                 {% csrf_token %}
 

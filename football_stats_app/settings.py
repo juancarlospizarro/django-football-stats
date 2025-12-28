@@ -158,3 +158,6 @@ EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 
 # Dirección desde la que se enviarán los correos
 DEFAULT_FROM_EMAIL = 'footmanager@alwaysdata.net'
+
+
+AUTH_USER_MODEL = 'usuarios.Usuario'

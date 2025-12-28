@@ -20,7 +20,7 @@ class Usuario(AbstractUser):
     telefono = models.CharField(_('teléfono'), max_length=15, blank=True, null=True)
     fecha_nacimiento = models.DateField(_('fecha de nacimiento'), blank=True, null=True)
     foto = models.ImageField(upload_to='fotos_perfil/', blank=True, null=True)
-    
+    tiene_equipo = models.BooleanField(default=False)
     rol = models.CharField(
         max_length=20, 
         choices=Rol.choices, 

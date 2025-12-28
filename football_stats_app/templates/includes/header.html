@@ -1,42 +1,115 @@
 {% load static %}
+
 <header>
-        <!-- Navbar de Bootstrap -->
-        <nav class="navbar navbar-expand-lg bg-foot-green navbar-dark shadow-sm">
-            <div class="container">
-                <a class="navbar-brand" href="{% url 'landing' %}">
-                <img src="{% static 'img/logo.png' %}" alt="FootManager Logo" style="height: 70px;">
+<nav class="navbar navbar-expand-lg bg-foot-green navbar-dark shadow-sm">
+    <div class="container">
+
+        <!-- LOGO -->
+        <a class="navbar-brand" href="{% url 'landing' %}">
+            <img src="{% static 'img/logo.png' %}" alt="FootManager Logo" style="height: 70px;">
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+
+            <!-- IZQUIERDA -->
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <button id="themeToggle" class="nav-link">Modo oscuro</button>
+                </li>
+            </ul>
+
+            <!-- DERECHA -->
+            <ul class="navbar-nav ms-auto align-items-center">
+
+{% if user.is_authenticated %}
+
+    {# ===== ENTRENADOR ===== #}
+    {% if user.rol == "ENTRENADOR" %}
+
+        {% if user.tiene_equipo %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'equipo:dashboard' %}">Mi equipo</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'equipo:jugadores' %}">Jugadores</a>
+            </li>
+        {% else %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'equipo:crear' %}">Crear equipo</a>
+            </li>
+        {% endif %}
+
+    {# ===== JUGADOR ===== #}
+    {% elif user.rol == "JUGADOR" %}
+
+        {% if user.tiene_equipo %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'jugador:equipo' %}">Mi equipo</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'jugador:stats' %}">Mis estadísticas</a>
+            </li>
+        {% else %}
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'jugador:buscar_equipo' %}">
+                    Buscar equipo
                 </a>
-                <!-- Botón de hamburguesa para móviles -->
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                
-                <!-- Contenido del Navbar -->
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <!-- Enlaces de la izquierda -->
-                    <ul class="navbar-nav me-auto">
-                        <li class="nav-item">
-                            <button id="themeToggle" class="nav-link">
-                                Modo oscuro
-                            </button>
-                        </li>
-                        <li class="nav-item">
-                            <button id="" class="nav-link">
-                                Cambiar idioma
-                            </button>
-                        </li>
-                    </ul>
-                    
-                    <!-- Enlaces de la derecha -->
-                    <ul class="navbar-nav ms-auto align-items-center">
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'usuarios:login' %}">Iniciar Sesión</a>
-                        </li>
-                        <li class="nav-item ms-lg-3">
-                            <a class="btn btn-foot-register-header rounded-3 px-3 py-2" href="{% url 'usuarios:signin' %}">Registrarse</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
+            </li>
+        {% endif %}
+
+    {% endif %}
+
+    {# ===== PERFIL ===== #}
+    <li class="nav-item dropdown ms-3">
+        <a class="nav-link dropdown-toggle d-flex align-items-center"
+           href="#" role="button" data-bs-toggle="dropdown">
+
+            {% if user.foto %}
+                <img src="{{ user.foto.url }}" class="rounded-circle me-2" width="40" height="40">
+            {% else %}
+                <img src="{% static 'img/default-avatar.png' %}" class="rounded-circle me-2" width="40" height="40">
+            {% endif %}
+
+            {{ user.first_name }}
+
+        </a>
+
+        <ul class="dropdown-menu dropdown-menu-end">
+            <li>
+                <a class="dropdown-item" href="{% url 'usuarios:perfil' %}">
+                    Mi perfil
+                </a>
+            </li>
+            <li><hr class="dropdown-divider"></li>
+            <li>
+                <a class="dropdown-item text-danger" href="{% url 'usuarios:logout' %}">
+                    Cerrar sesión
+                </a>
+            </li>
+        </ul>
+    </li>
+
+{% else %}
+
+    {# ===== NO AUTENTICADO ===== #}
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'usuarios:login' %}">Iniciar sesión</a>
+    </li>
+    <li class="nav-item ms-lg-3">
+        <a class="btn btn-foot-register-header px-3 py-2"
+           href="{% url 'usuarios:signin' %}">
+            Registrarse
+        </a>
+    </li>
+
+{% endif %}
+
+</ul>
+        </div>
+    </div>
+</nav>
+</header>

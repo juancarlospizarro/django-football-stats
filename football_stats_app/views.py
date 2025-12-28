@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 
-def landing_view(request):
+def landing(request):
     # 1. Si el usuario NO está logueado, mostramos la landing de invitado
     if not request.user.is_authenticated:
         return render(request, 'landing.html') # Tu landing page bonita de marketing

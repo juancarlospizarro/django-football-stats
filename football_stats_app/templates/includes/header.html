@@ -16,99 +16,122 @@
         <div class="collapse navbar-collapse" id="navbarNav">
 
             <!-- IZQUIERDA -->
-            <ul class="navbar-nav me-auto">
+            <ul class="navbar-nav me-auto align-items-center">
                 <li class="nav-item">
-                    <button id="themeToggle" class="nav-link">Modo oscuro</button>
+                    <button id="themeToggle" class="nav-link">
+                        Modo oscuro
+                    </button>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle d-flex align-items-center"
+                    href="#"
+                    role="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false">
+
+                        <img src="{% static 'img/es.png' %}" width="20" class="me-2">
+                        ES
+                    </a>
+
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center" href="#" alt="Idioma español">
+                                <img src="{% static 'img/es.png' %}" width="20" class="me-2">
+                                Español
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center" href="#"  alt="Idioma inglés">
+                                <img src="{% static 'img/en.png' %}" width="20" class="me-2">
+                                Inglés
+                            </a>
+                        </li>
+                    </ul>
                 </li>
             </ul>
 
             <!-- DERECHA -->
             <ul class="navbar-nav ms-auto align-items-center">
 
-{% if user.is_authenticated %}
+            {% if user.is_authenticated %}
 
-    {# ===== ENTRENADOR ===== #}
-    {% if user.rol == "ENTRENADOR" %}
+                <li class="nav-item">
+                    <a class="nav-link" href="">Inicio</a>
+                </li>
 
-        {% if user.tiene_equipo %}
-            <li class="nav-item">
-                <a class="nav-link" href="">Mi equipo</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="">Jugadores</a>
-            </li>
-        {% else %}
-            <li class="nav-item">
-                <a class="nav-link" href="">Crear equipo</a>
-            </li>
-        {% endif %}
+                {# ===== ENTRENADOR ===== #}
+                {% if user.rol == "ENTRENADOR" %}
 
-    {# ===== JUGADOR ===== #}
-    {% elif user.rol == "JUGADOR" %}
+                    {% if user.tiene_equipo %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="">Equipo</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="">Análisis</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="">Pizarra</a>
+                        </li>
+                    {% endif %}
 
-        {% if user.tiene_equipo %}
-            <li class="nav-item">
-                <a class="nav-link" href="">Mi equipo</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="">Mis estadísticas</a>
-            </li>
-        {% else %}
-            <li class="nav-item">
-                <a class="nav-link" href="">
-                    Buscar equipo
-                </a>
-            </li>
-        {% endif %}
+                {# ===== JUGADOR ===== #}
+                {% elif user.rol == "JUGADOR" %}
 
-    {% endif %}
+                    {% if user.tiene_equipo %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="">Mi equipo</a>
+                        </li>
+                    {% endif %}
 
-    {# ===== PERFIL ===== #}
-    <li class="nav-item dropdown ms-3">
-        <a class="nav-link dropdown-toggle d-flex align-items-center"
-           href="#" role="button" data-bs-toggle="dropdown">
+                {% endif %}
 
-            {% if user.foto %}
-                <img src="{{ user.foto.url }}" class="rounded-circle me-2" width="40" height="40">
+                {# ===== PERFIL ===== #}
+                <li class="nav-item dropdown ms-3">
+                    <a class="nav-link dropdown-toggle d-flex align-items-center"
+                    href="#" role="button" data-bs-toggle="dropdown">
+
+                        {% if user.foto %}
+                            <img src="{{ user.foto.url }}" class="rounded-circle me-2" width="40" height="40">
+                        {% else %}
+                            <img src="{% static 'img/default-avatar.jpg' %}" class="rounded-circle me-2" width="40" height="40">
+                        {% endif %}
+
+                        {{ user.first_name }}
+
+                    </a>
+
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li>
+                            <a class="dropdown-item" href="">
+                                Mi perfil
+                            </a>
+                        </li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li>
+                            <a class="dropdown-item text-danger" href="{% url 'usuarios:logout' %}">
+                                Cerrar sesión
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+
             {% else %}
-                <img src="{% static 'img/default-avatar.jpg' %}" class="rounded-circle me-2" width="40" height="40">
+
+                {# ===== NO AUTENTICADO ===== #}
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'usuarios:login' %}">Iniciar sesión</a>
+                </li>
+                <li class="nav-item ms-lg-3">
+                    <a class="btn btn-foot-register-header px-3 py-2"
+                    href="{% url 'usuarios:signin' %}">
+                        Registrarse
+                    </a>
+                </li>
+
             {% endif %}
 
-            {{ user.first_name }}
-
-        </a>
-
-        <ul class="dropdown-menu dropdown-menu-end">
-            <li>
-                <a class="dropdown-item" href="">
-                    Mi perfil
-                </a>
-            </li>
-            <li><hr class="dropdown-divider"></li>
-            <li>
-                <a class="dropdown-item text-danger" href="{% url 'usuarios:logout' %}">
-                    Cerrar sesión
-                </a>
-            </li>
-        </ul>
-    </li>
-
-{% else %}
-
-    {# ===== NO AUTENTICADO ===== #}
-    <li class="nav-item">
-        <a class="nav-link" href="{% url 'usuarios:login' %}">Iniciar sesión</a>
-    </li>
-    <li class="nav-item ms-lg-3">
-        <a class="btn btn-foot-register-header px-3 py-2"
-           href="{% url 'usuarios:signin' %}">
-            Registrarse
-        </a>
-    </li>
-
-{% endif %}
-
-</ul>
+            </ul>
         </div>
     </div>
 </nav>

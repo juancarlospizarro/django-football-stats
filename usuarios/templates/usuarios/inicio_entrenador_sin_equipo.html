@@ -1,0 +1,15 @@
+{% extends "includes/base.html" %}
+{% load static %}
+{% block title %}FutDataManager - Inicio{% endblock %}
+{% block content %}
+<div class="container my-5">
+
+            <!-- Sección Título -->
+            <section class="text-center col-lg-8 mx-auto mb-5 py-5">
+                <h1 class="display-4 fw-bold text-foot-darkgray mb-3">!Bienvenido {% user.first_name %}!</h1>
+                <p class="fs-5 text-secondary">
+                    Actualmente no perteneces a ningún equipo.
+                </p>
+            </section>
+        </div>
+{% endblock %}

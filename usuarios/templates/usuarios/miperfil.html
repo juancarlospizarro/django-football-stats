@@ -1,0 +1,192 @@
+{% extends "includes/base.html" %}
+{% load static %}
+
+{% block title %}FutDataManager - Mi perfil{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    
+    <div class="row gy-5">
+        
+        <!-- COLUMNA IZQUIERDA: Información y Botones (Orden 2 en móvil, 1 en escritorio) -->
+        <div class="col-md-8 order-2 order-md-1">
+            
+            <!-- Encabezado con Nombre -->
+            <div class="mb-4">
+                <!-- Usamos text-primary que es tu verde corporativo -->
+                <h2 class="h3 text-foot-green fw-bold mb-2">
+                    {{ user.first_name }} {{ user.last_name }}
+                </h2>
+                <div class="card shadow-sm border-0 mb-4">
+    <div class="card-body">
+
+        <h3 class="h5 text-foot-green fw-bold mb-3">
+            Información general del jugador
+        </h3>
+
+        <ul class="list-unstyled mb-0">
+            <li class="mb-2">
+                <strong>Nombre:</strong>
+                {{ user.first_name }} {{ user.last_name }}
+            </li>
+
+            <li class="mb-2">
+                <strong>Email:</strong>
+                {{ user.email }}
+            </li>
+
+            <li class="mb-2">
+                <strong>Teléfono:</strong>
+                {{ user.telefono }}
+            </li>
+
+            <li class="mb-2">
+                <strong>Fecha de nacimiento:</strong>
+                {{ user.fecha_nacimiento|date:"d/m/Y" }}
+            </li>
+
+            <li class="mb-2">
+                <strong>Rol:</strong>
+                {{ user.rol }}
+            </li>
+
+            <li class="mb-2">
+                <strong>Fecha de registro:</strong>
+                {{ user.date_joined|date:"d/m/Y" }}
+            </li>
+
+            {% if user.last_login %}
+            <li class="mb-2">
+                <strong>Último acceso:</strong>
+                {{ user.last_login|date:"d/m/Y H:i" }}
+            </li>
+            {% endif %}
+        </ul>
+
+    </div>
+</div>
+
+            </div>
+
+            <!-- Botón Actualizar Información -->
+            <div class="mb-5">
+                <a href="#" class="btn btn-foot-form-enviar px-4 py-2">
+                    Actualizar información
+                </a>
+            </div>
+
+            {% if user.rol == "jugador" %}
+            <!-- Sección Lesiones -->
+            <div class="mb-5">
+                <h3 class="h4 text-foot-green fw-bold mb-2">Lesiones</h3>
+                <p class="fs-5 text-secondary">Información lesiones del jugador</p>
+            </div>
+
+            <!-- Sección Sanciones -->
+            <div class="mb-5">
+                <h3 class="h4 text-foot-green fw-bold mb-2">Sanciones</h3>
+                <p class="fs-5 text-secondary">Información sanciones del jugador</p>
+            </div>
+
+            {% elif user.rol == "entrenador" %}
+            <!-- Sección Equipos -->
+            <div class="mb-5">
+                <h3 class="h4 text-foot-green fw-bold mb-2">Equipos a los que ha entrenado</h3>
+                <p class="fs-5 text-secondary">Información equipos que el entrenador ha entrenado</p>
+            </div>
+                {% if user.tiene_equipo %}
+                <!-- Sección Estadisticas Equipo Actual -->
+                <div class="mb-5">
+                    <h3 class="h4 text-foot-green fw-bold mb-2">Estadísticas del equipo actual</h3>
+                    <p class="fs-5 text-secondary">Estadisticas del equipo actual del entrenador</p>
+                </div>
+                {% endif %}
+
+            {% endif %}
+            <!-- Botones de Acción (Zona de Peligro) -->
+            <div class="d-flex flex-wrap gap-3 mt-5 pt-3">
+                <!-- Botón Cerrar Sesión (Gris Oscuro) -->
+                <a href="{% url 'usuarios:logout' %}" class="btn text-white px-4 py-2 rounded-3 border-0" 
+                   style="background-color: #504847;">
+                    Cerrar sesión
+                </a>
+                
+                <!-- Botón Eliminar Cuenta (Gris Oscuro) -->
+                <button 
+                type="button"
+                class="btn text-white px-4 py-2 rounded-3 border-0"
+                style="background-color: #504847;"
+                data-bs-toggle="modal"
+                data-bs-target="#confirmDeleteModal"
+            >
+                Eliminar cuenta
+            </button>
+
+            <div class="modal fade" id="confirmDeleteModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-4">
+      
+      <div class="modal-header">
+        <h5 class="modal-title text-danger">Eliminar cuenta</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <div class="modal-body">
+        <p>
+          ⚠️ Esta acción <strong>no se puede deshacer</strong>.<br>
+          ¿Estás seguro de que quieres eliminar tu cuenta?
+        </p>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary" data-bs-dismiss="modal">
+          Cancelar
+        </button>
+
+        <button class="btn btn-danger" id="confirmDeleteBtn" data-url="{% url 'usuarios:eliminar_cuenta' %}">
+          Sí, eliminar cuenta
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="deletedSuccessModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-4 text-center p-4">
+
+      <h5 class="text-success mb-3">Cuenta eliminada</h5>
+      <p>Tu cuenta ha sido eliminada correctamente.</p>
+
+    </div>
+  </div>
+</div>
+            </div>
+
+        </div>
+
+        <!-- COLUMNA DERECHA: Foto de Perfil (Orden 1 en móvil, 2 en escritorio) -->
+        <div class="col-md-4 order-1 order-md-2 d-flex justify-content-center justify-content-md-end align-items-start">
+            
+            <!-- Lógica para mostrar la foto -->
+            {% if user.foto %}
+                <!-- Si tiene foto subida -->
+                <img src="{{ user.foto.url }}" alt="Foto de perfil" 
+                     class="rounded-circle shadow-sm bg-light"
+                     style="width: 220px; height: 220px; object-fit: cover;">
+            {% else %}
+                <!-- Placeholder si no tiene foto (Imagen genérica o iniciales) -->
+                <!-- Usamos placehold.co con tus colores: fondo verde, texto blanco -->
+                <img src="{% static 'img/default_avatar.jpg' %}" 
+                     alt="Sin foto" 
+                     class="rounded-circle shadow-sm"
+                     style="width: 220px; height: 220px; object-fit: cover;">
+            {% endif %}
+            
+        </div>
+
+    </div>
+</div>
+<script src="{% static 'js/miperfil.js' %}"></script>
+{% endblock %}

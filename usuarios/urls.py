@@ -10,6 +10,8 @@ urlpatterns = [
     path('login/', views.login_view, name="login"),
     path('signin/', views.signin, name="signin"),
     path('logout/', views.logout_view, name='logout'),
+    path('miperfil/', views.miperfil, name='miperfil'),
+    path('miperfil/eliminarcuenta/', views.eliminar_cuenta, name="eliminar_cuenta"),
 
     # Enviar email
     path('password_forget/', 

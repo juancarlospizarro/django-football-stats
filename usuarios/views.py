@@ -6,6 +6,7 @@ from django.contrib.auth.views import PasswordResetConfirmView
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from .models import Usuario, PerfilJugador, PerfilEntrenador
+from django.http import JsonResponse
 
 def login_view(request):
     if request.method == "GET":
@@ -89,11 +90,24 @@ def logout_view(request):
     logout(request)
     return redirect('landing')  # o 'usuarios:login'
 
+def miperfil(request):
+    return render(request, 'usuarios/miperfil.html')
+
+def eliminar_cuenta(request):
+    if request.method == "POST":
+        user = request.user
+        logout(request)          # cerrar sesión primero
+        user.delete()            # eliminar usuario
+        return JsonResponse({"success": True})
+
+    return JsonResponse({"success": False}, status=400)
+
 class ResetPasswordView(SuccessMessageMixin, PasswordResetView):
     template_name = 'usuarios/password_forget.html'
     email_template_name = 'usuarios/password_forget_email.html'
     subject_template_name = 'usuarios/password_forget_subject.txt'
     success_url = reverse_lazy('usuarios:password_forget_done')
+    html_email_template_name = 'usuarios/password_forget_email.html'
 
 
 class CustomPasswordResetConfirmView(PasswordResetConfirmView):

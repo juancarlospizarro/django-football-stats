@@ -11859,67 +11859,92 @@ textarea.form-control-lg {
     display: none !important;
   }
 }
-/* Aplicamos la fuente y el color principal del prototipo */
+/* Variables SCSS */
+/* Variables CSS para uso dinámico */
+:root {
+  --primary: #27a770;
+  --secondary: #504847;
+  --tertiary: #ffffff;
+  --background: #f8f9fa;
+}
+
+/* Modo oscuro */
+body.dark-mode {
+  --primary: #90caf9;
+  --secondary: #ffffff;
+  --tertiary: #121212;
+  --background: #121212;
+}
+
+.breadcrumb a {
+  color: var(--secondary);
+}
+
+.breadcrumb .active {
+  color: var(--secondary);
+}
+
+/* Aplicamos la fuente y colores mediante variables CSS */
 body {
   font-family: "Inter", sans-serif;
-  color: #504847; /* Tu 'foot-darkgray' */
-  /* Configuración para el "sticky footer" */
+  color: var(--secondary);
+  background-color: var(--background);
+  /* Sticky footer */
   display: flex;
   flex-direction: column;
   min-height: 100vh;
 }
 
-/* Hacemos que el contenido principal crezca para empujar el footer hacia abajo */
 main {
   flex-grow: 1;
 }
 
-/* Clases personalizadas con colores corporativos */
+/* Colores corporativos */
 .bg-foot-green {
-  background-color: #27a770;
+  background-color: var(--primary);
 }
 
 .text-foot-green {
-  color: #27a770;
+  color: var(--primary);
 }
 
-/* Botón personalizado para "Registrarse" como en tu prototipo */
+/* Botón "Registrarse" */
 .btn-foot-form-enviar {
-  background-color: #27a770;
-  color: #ffffff;
+  background-color: var(--primary);
+  color: var(--tertiary);
   font-weight: 600;
-  border: 1px solid #27a770;
+  border: 1px solid var(--primary);
 }
 
 .btn-foot-form-enviar:hover {
-  background-color: #ffffff; /* Un gris muy claro al pasar el ratón */
-  color: #27a770;
-  border-color: #27a770;
+  background-color: var(--tertiary);
+  color: var(--primary);
+  border-color: var(--primary);
 }
 
-/* Botón personalizado para "Registrarse" como en tu prototipo */
+/* Botón registro en header */
 .btn-foot-register-header {
-  background-color: #ffffff;
-  color: #27a770;
+  background-color: var(--tertiary);
+  color: var(--primary);
   font-weight: 600;
-  border: 1px solid #ffffff;
+  border: 1px solid var(--tertiary);
 }
 
 .btn-foot-register-header:hover {
-  background-color: #f8f9fa; /* Un gris muy claro al pasar el ratón */
-  color: #27a770;
-  border-color: #f8f9fa;
+  background-color: var(--background);
+  color: var(--primary);
+  border-color: var(--background);
 }
 
-/* Ajustes para los iconos del footer */
+/* Iconos del footer */
 .footer-social-icon {
-  font-size: 1.5rem; /* 24px */
-  color: white;
+  font-size: 1.5rem;
+  color: var(--tertiary);
   transition: color 0.2s;
 }
 
 .footer-social-icon:hover {
-  color: #dddddd; /* Un blanco más suave al pasar el ratón */
+  color: #dddddd;
 }
 
 /*# sourceMappingURL=style.css.map */

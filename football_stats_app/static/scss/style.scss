@@ -1,69 +1,93 @@
 @import "../node_modules/bootstrap/scss/bootstrap";
 
+/* Variables SCSS */
 $fuente-principal: 'Inter', sans-serif;
 $color-principal: #27a770;
 $color-secundario: #504847;
 $color-terciario: #ffffff;
 $color-cuaternario: #f8f9fa;
 
+/* Variables CSS para uso dinámico */
+:root {
+  --primary: #{$color-principal};
+  --secondary: #{$color-secundario};
+  --tertiary: #{$color-terciario};
+  --background: #{$color-cuaternario};
+}
 
- /* Aplicamos la fuente y el color principal del prototipo */
-        body {
-            font-family: $fuente_principal;
-            color: $color-secundario; /* Tu 'foot-darkgray' */
-            
-            /* Configuración para el "sticky footer" */
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
+/* Modo oscuro */
+body.dark-mode {
+  --primary: #90caf9;
+  --secondary: #ffffff;
+  --tertiary: #121212;
+  --background: #121212;
+}
 
-        /* Hacemos que el contenido principal crezca para empujar el footer hacia abajo */
-        main {
-            flex-grow: 1;
-        }
+.breadcrumb a {
+    color: var(--secondary);
+}
+.breadcrumb .active {
+    color: var(--secondary);
+}
 
-        /* Clases personalizadas con colores corporativos */
-        .bg-foot-green {
-            background-color: $color-principal;
-        }
-        
-        .text-foot-green {
-            color: $color-principal;
-        }
+/* Aplicamos la fuente y colores mediante variables CSS */
+body {
+    font-family: $fuente-principal;
+    color: var(--secondary);
+    background-color: var(--background);
 
-        /* Botón personalizado para "Registrarse" como en tu prototipo */
-        .btn-foot-form-enviar {
-            background-color: $color-principal;
-            color: $color-terciario;
-            font-weight: 600;
-            border: 1px solid $color-principal;
-        }
-        .btn-foot-form-enviar:hover {
-            background-color: $color-terciario; /* Un gris muy claro al pasar el ratón */
-            color: $color-principal;
-            border-color: $color-principal;
-        }
+    /* Sticky footer */
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
 
-        /* Botón personalizado para "Registrarse" como en tu prototipo */
-        .btn-foot-register-header {
-            background-color: #ffffff;
-            color: $color-principal;
-            font-weight: 600;
-            border: 1px solid #ffffff;
-        }
-        .btn-foot-register-header:hover {
-            background-color: #f8f9fa; /* Un gris muy claro al pasar el ratón */
-            color: $color-principal;
-            border-color: #f8f9fa;
-        }
-        
-        /* Ajustes para los iconos del footer */
-        .footer-social-icon {
-            font-size: 1.5rem; /* 24px */
-            color: white;
-            transition: color 0.2s;
-        }
-        .footer-social-icon:hover {
-            color: #dddddd; /* Un blanco más suave al pasar el ratón */
-        }
+
+main {
+    flex-grow: 1;
+}
+
+/* Colores corporativos */
+.bg-foot-green {
+    background-color: var(--primary);
+}
+
+.text-foot-green {
+    color: var(--primary);
+}
+
+/* Botón "Registrarse" */
+.btn-foot-form-enviar {
+    background-color: var(--primary);
+    color: var(--tertiary);
+    font-weight: 600;
+    border: 1px solid var(--primary);
+}
+.btn-foot-form-enviar:hover {
+    background-color: var(--tertiary);
+    color: var(--primary);
+    border-color: var(--primary);
+}
+
+/* Botón registro en header */
+.btn-foot-register-header {
+    background-color: var(--tertiary);
+    color: var(--primary);
+    font-weight: 600;
+    border: 1px solid var(--tertiary);
+}
+.btn-foot-register-header:hover {
+    background-color: var(--background);
+    color: var(--primary);
+    border-color: var(--background);
+}
+
+/* Iconos del footer */
+.footer-social-icon {
+    font-size: 1.5rem;
+    color: var(--tertiary);
+    transition: color 0.2s;
+}
+.footer-social-icon:hover {
+    color: #dddddd;
+}

@@ -1,6 +1,6 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="es" data-bs-theme="light">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,9 +19,30 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 
-<body class="bg-white">
+<body>
 
     {% include "includes/header.html" %}
+    {% if breadcrumbs %}
+    <nav aria-label="breadcrumb" class="container my-3">
+        <ol class="breadcrumb">
+            {% for crumb in breadcrumbs %}
+                {% if crumb.url %}
+                    <li class="breadcrumb-item">
+                        <a href="{{ crumb.url }}" class="text-secondary text-decoration-none">
+                            {{ crumb.name }}
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="breadcrumb-item active text-secondary" aria-current="page">
+                        {{ crumb.name }}
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ol>
+    </nav>
+    {% endif %}
+
+
     <main>
         {% block content %}
         {% endblock %}
@@ -31,5 +52,7 @@
     
     <script src="{% static 'node_modules/bootstrap/dist/js/bootstrap.bundle.min.js' %}" xintegrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="{% static 'js/base.js' %}"></script>
+    <script src="{% static 'fullcalendar/dist/index.global.min.js' %}"></script>
+
 </body>
 </html>

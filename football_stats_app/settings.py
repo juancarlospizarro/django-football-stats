@@ -70,6 +70,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'usuarios.context_processors.breadcrumbs',
             ],
         },
     },
@@ -148,16 +149,16 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 # Servidor SMTP de alwaysdata
-EMAIL_HOST = 'smtp-footmanager.alwaysdata.net'
+EMAIL_HOST = 'smtp-futdatamanager.alwaysdata.net'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True  # siempre que el puerto sea 587
 
 # Credenciales de tu cuenta de alwaysdata
-EMAIL_HOST_USER = 'footmanager@alwaysdata.net'
+EMAIL_HOST_USER = 'futdatamanager@alwaysdata.net'
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 
 # Dirección desde la que se enviarán los correos
-DEFAULT_FROM_EMAIL = 'footmanager@alwaysdata.net'
+DEFAULT_FROM_EMAIL = 'futdatamanager@alwaysdata.net'
 
 
 AUTH_USER_MODEL = 'usuarios.Usuario'

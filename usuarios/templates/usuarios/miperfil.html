@@ -70,10 +70,76 @@
 
             <!-- Botón Actualizar Información -->
             <div class="mb-5">
-                <a href="#" class="btn btn-foot-form-enviar px-4 py-2">
+                <a href="#" class="btn btn-foot-form-enviar px-4 py-2" data-bs-toggle="modal" data-bs-target="#updateProfileModal">
                     Actualizar información
                 </a>
             </div>
+
+            <!-- === MODAL DE ACTUALIZACIÓN === -->
+            <div class="modal fade" id="updateProfileModal" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-lg">
+                    <div class="modal-content rounded-4 border-0 shadow">
+                        <div class="modal-header border-bottom-0">
+                            <h5 class="modal-title fw-bold" id="updateModalLabel" style="color: #27a770;">Actualizar Perfil</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        
+                        <div class="modal-body p-4">
+                            <form method="POST" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="row g-3">
+                                    
+                                    <!-- Nombre -->
+                                    <div class="col-md-6">
+                                        <label for="firstName" class="form-label fw-medium">Nombre</label>
+                                        <input type="text" class="form-control rounded-3" id="firstName" name="first_name" value="{{ user.first_name }}">
+                                    </div>
+                                    
+                                    <!-- Apellidos -->
+                                    <div class="col-md-6">
+                                        <label for="lastName" class="form-label fw-medium">Apellidos</label>
+                                        <input type="text" class="form-control rounded-3" id="lastName" name="last_name" value="{{ user.last_name }}">
+                                    </div>
+
+                                    <!-- Email -->
+                                    <div class="col-12">
+                                        <label for="email" class="form-label fw-medium">Email</label>
+                                        <input type="email" class="form-control rounded-3" id="email" name="email" value="{{ user.email }}">
+                                    </div>
+
+                                    <!-- Teléfono -->
+                                    <div class="col-md-6">
+                                        <label for="phone" class="form-label fw-medium">Teléfono</label>
+                                        <input type="tel" class="form-control rounded-3" id="phone" name="telefono" value="{{ user.telefono|default:'' }}">
+                                    </div>
+
+                                    <!-- Fecha Nacimiento -->
+                                    <div class="col-md-6">
+                                        <label for="dob" class="form-label fw-medium">Fecha de nacimiento</label>
+                                        <!-- Importante: |date:'Y-m-d' es necesario para que el input type="date" reconozca el valor -->
+                                        <input type="date" class="form-control rounded-3" id="dob" name="fecha_nacimiento" value="{{ user.fecha_nacimiento|date:'Y-m-d' }}">
+                                    </div>
+
+                                    <!-- Foto -->
+                                    <div class="col-12">
+                                        <label for="foto" class="form-label fw-medium">Foto de perfil</label>
+                                        <input type="file" class="form-control rounded-3" id="foto" name="foto" accept="image/*">
+                                        <div class="form-text">Sube una nueva imagen solo si quieres cambiar la actual.</div>
+                                    </div>
+
+                                </div>
+
+                                <div class="d-flex justify-content-end gap-2 mt-4">
+                                    <button type="button" class="btn btn-light text-secondary px-4 rounded-3" data-bs-dismiss="modal">Cancelar</button>
+                                    <button type="submit" class="btn text-white px-4 rounded-3" style="background-color: #27a770;">Guardar cambios</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- === FIN MODAL === -->
+
 
             {% if user.rol == "jugador" %}
             <!-- Sección Lesiones -->

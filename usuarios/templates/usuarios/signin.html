@@ -20,70 +20,171 @@
                             
                             <!-- Mostramos errores si los hay -->
                         {% if error %}
-                            <div class="alert alert-danger" role="alert">
-                                {{ error }}
+                            <div class="modal fade" id="modalEmailExiste" tabindex="-1">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                <div class="modal-header bg-danger">
+                                    <h5 class="modal-title text-white">Error en el registro</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>{{ error }}</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                    Cerrar
+                                    </button>
+                                </div>
+                                </div>
+                            </div>
                             </div>
                         {% endif %}
+
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="modal fade" id="modalRegistroOk" tabindex="-1">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                    <div class="modal-header bg-success">
+                                        <h5 class="modal-title text-white">Registro completado</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>{{ message }}</p>
+                                    </div>
+                                    </div>
+                                </div>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
                         
-                            <form method="POST" enctype="multipart/form-data">
+                        <!-- MODAL -->
+                        
+                        
+
+                            <form id="formulario_registro" method="POST" enctype="multipart/form-data">
                                 {% csrf_token %}
 
                                 <!-- Campo Nombre -->
                                 <div class="mb-3">
-                                    <label for="nombre" class="form-label fw-medium">Nombre</label>
-                                    <input type="text" class="form-control form-control-lg rounded-3" id="nombre" name="nombre" required>
+                                    <label for="nombre" class="form-label fw-medium">Nombre*</label>
+                                    <input type="text" class="form-control form-control-lg rounded-3" id="nombre" name="nombre" value="{{ nombre_value|default:'' }}" required>
+                                    <small id="errorNombre" class="help-text text-danger" aria-live="polite"></small>
                                 </div>
 
                                 <!-- Campo Apellidos -->
                                 <div class="mb-3">
-                                    <label for="apellidos" class="form-label fw-medium">Apellidos</label>
-                                    <input type="text" class="form-control form-control-lg rounded-3" id="apellidos" name="apellidos" required>
+                                    <label for="apellidos" class="form-label fw-medium">Apellidos*</label>
+                                    <input type="text" class="form-control form-control-lg rounded-3" id="apellidos" name="apellidos" value="{{ apellidos_value|default:'' }}" required>
+                                    <small id="errorApellidos" class="help-text text-danger" aria-live="polite"></small>
                                 </div>
 
                                 <!-- Campo Teléfono -->
                                 <div class="mb-3">
-                                    <label for="telefono" class="form-label fw-medium">Teléfono</label>
-                                    <input type="text" class="form-control form-control-lg rounded-3" id="telefono" name="telefono" required>
+                                    <label for="telefono" class="form-label fw-medium">Teléfono*</label>
+                                    <input type="text" class="form-control form-control-lg rounded-3" id="telefono" name="telefono" value="{{ telefono_value|default:'' }}" required>
+                                    <small id="errorTelefono" class="help-text text-danger" aria-live="polite"></small>
                                 </div>
 
                                 <!-- Campo Fecha Nacimiento -->
                                 <div class="mb-3">
-                                    <label for="fechanacimiento" class="form-label fw-medium">Fecha de Nacimiento</label>
-                                    <input type="date" class="form-control form-control-lg rounded-3" id="fechanacimiento" name="fechanacimiento" required>
+                                    <label for="fechanacimiento" class="form-label fw-medium">Fecha de Nacimiento*</label>
+                                    <input type="date" class="form-control form-control-lg rounded-3" id="fechanacimiento" name="fechanacimiento" value="{{ fechanacimiento_value|default:'' }}" required>
+                                    <small id="errorFechaNacimiento" class="help-text text-danger" aria-live="polite"></small>
                                 </div>
 
                                 <!-- Campo Foto -->
                                 <div class="mb-3">
                                     <label for="foto" class="form-label fw-medium">Foto de perfil</label>
-                                    <input type="file" class="form-control form-control-lg rounded-3" id="foto" name="foto" accept="image/*">
+                                    <input type="file" class="form-control form-control-lg rounded-3" id="foto" name="foto" accept="image/*" value="{{ foto_value|default:'' }}">
+                                    <small id="errorFoto" class="help-text text-danger" aria-live="polite"></small>
                                 </div>
 
                                 <!-- Campo Email -->
                                 <div class="mb-3">
-                                    <label for="emailInput" class="form-label fw-medium">Correo electrónico</label>
-                                    <input type="email" class="form-control form-control-lg rounded-3" id="emailInput" name="email" required>
+                                    <label for="emailInput" class="form-label fw-medium">Correo electrónico*</label>
+                                    <input type="email" class="form-control form-control-lg rounded-3" id="emailInput" name="email" value="{{ email_value|default:'' }}" required>
+                                    <small id="errorEmail" class="help-text text-danger" aria-live="polite"></small>
                                 </div>
                                 
                                 <!-- Campo Contraseña -->
                                 <div class="mb-3">
-                                    <label for="passwordInput" class="form-label fw-medium">Contraseña</label>
-                                    <input type="password" class="form-control form-control-lg rounded-3" id="passwordInput" name="password1" required>
+                                    <label for="passwordInput" class="form-label fw-medium">Contraseña*</label>
+                                    <input type="password" class="form-control form-control-lg rounded-3" id="passwordInput1" name="password1" required>
+                                    <small id="textoSubmit" class="help-text text-danger" aria-live="polite"></small>
+                                    <!-- Contenedor de reglas -->
+                                    <div id="reglasPassword" class="mt-1 d-none">
+                                        <small id="reglaLongitud" class="text-danger d-block" aria-live="polite">• Al menos 6 caracteres</small>
+                                        <small id="reglaMayuscula" class="text-danger d-block" aria-live="polite">• Al menos una mayúscula</small>
+                                        <small id="reglaNumero" class="text-danger d-block" aria-live="polite">• Al menos un número</small>
+                                        <small id="reglaEspecial" class="text-danger" aria-live="polite">• Al menos un carácter especial</small>
+                                    </div>
                                 </div>
 
                                 <div class="mb-3">
-                                    <label for="passwordInput" class="form-label fw-medium">Repita su contraseña</label>
-                                    <input type="password" class="form-control form-control-lg rounded-3" id="passwordInput" name="password2" required>
+                                    <label for="passwordInput" class="form-label fw-medium">Repita su contraseña*</label>
+                                    <input type="password" class="form-control form-control-lg rounded-3" id="passwordInput2" name="password2" required>
+                                    <small id="errorRepetirContrasena" class="help-text text-danger" aria-live="polite"></small>
                                 </div>
                                 
                                 <!-- Checkbox "Entrenador" -->
                                 <div class="form-check mb-4">
-                                    <input class="form-check-input" type="checkbox" value="true" id="checkEntrenador" name="es_entrenador">
+                                    <input class="form-check-input" type="checkbox" id="checkEntrenador" name="es_entrenador" {% if es_entrenador_value %}checked{% endif %}>
                                     <label class="form-check-label" for="checkEntrenador">
                                         Entrenador
                                     </label>
                                     <div class="form-text mt-1">
                                         Marca esta casilla en caso de que quieras registrarte como entrenador
                                     </div>
+                                </div>
+
+                                <div class="mb-3">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="terminos" aria-describedby="errorTerminos" name="terminos" required>
+                                    <label class="form-check-label" for="terminos">
+                                        Acepto los <a href="#" data-bs-toggle="modal" data-bs-target="#modalTerminos">términos y condiciones*</a>
+                                    </label>
+                                </div>
+                                <small id="errorTerminos" class="text-danger" aria-live="polite"></small>
+                            </div>
+                            <div class="modal fade" id="modalTerminos" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                                    <div class="modal-content">
+
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Términos y condiciones</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+
+                                    <div class="modal-body">
+                                        <p>
+                                            Al registrarte en FutDataManager, aceptas que los datos proporcionados son veraces y que los utilizarás de forma responsable.
+                                        </p>
+                                        <br>
+                                        <p>
+                                            Los datos personales recogidos se usarán únicamente para la gestión de la cuenta de usuario, el acceso a los servicios ofrecidos y la mejora de la experiencia en la plataforma. En ningún caso serán cedidos a terceros sin consentimiento expreso.
+                                        </p>
+                                        <br>
+                                        <p>
+                                            El usuario se compromete a no realizar un uso indebido del sitio web, ni a introducir contenido malicioso o fraudulento. La empresa se reserva el derecho de modificar estos términos o suspender cuentas que incumplan las normas establecidas.
+                                        </p>
+                                        <br>
+                                        <p>
+                                            Al hacer clic en “Acepto”, confirmas que has leído y aceptas estos términos y condiciones.
+                                        </p>
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                            Cerrar
+                                        </button>
+                                        <button type="button" class="btn btn-success" id="aceptarTerminos">
+                                            Acepto
+                                        </button>
+                                    </div>
+
+                                    </div>
+                                </div>
                                 </div>
 
                                 <!-- Botón de Enviar -->
@@ -99,5 +200,7 @@
             </div>
         </div>
     </main>
-
+    {% endblock %}
+    {% block extra_js %}
+    <script src="{% static 'js/registro.js' %}"></script>
     {% endblock %}

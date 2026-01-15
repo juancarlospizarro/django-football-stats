@@ -18,27 +18,62 @@
                     <div class="card shadow-sm rounded-4 border-0">
                         <div class="card-body p-4 p-md-5">
 
-                             <!-- Mostramos errores si los hay -->
+                            <!-- Mostramos errores si los hay -->
                         {% if error %}
-                            <div class="alert alert-danger" role="alert">
-                                {{ error }}
+                            <div class="modal fade" id="modalErrorInicioSesion" tabindex="-1">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                <div class="modal-header bg-danger">
+                                    <h5 class="modal-title text-white">Error en el inicio de sesión</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>{{ error }}</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                    Cerrar
+                                    </button>
+                                </div>
+                                </div>
+                            </div>
                             </div>
                         {% endif %}
 
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="modal fade" id="modalInicioSesionOk" tabindex="-1">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                    <div class="modal-header bg-success">
+                                        <h5 class="modal-title text-white">Inicio de sesión completado</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p>{{ message }}</p>
+                                    </div>
+                                    </div>
+                                </div>
+                                </div>
+                            {% endfor %}
+                        {% endif %}                        
                         
-                            <form method="POST">
+
+                            <form id="formulario_inicioSesion" method="POST">
                                 {% csrf_token %}
 
                                 <!-- Campo Email -->
                                 <div class="mb-3">
                                     <label for="emailInput" class="form-label fw-medium">Email</label>
-                                    <input type="email" class="form-control form-control-lg rounded-3" id="emailInput" name="email" required>
+                                    <input type="email" class="form-control form-control-lg rounded-3" id="emailInput" name="email" value="{{ email_value|default:'' }}" required>
+                                    <small class="help-text text-danger"></small>
                                 </div>
                                 
                                 <!-- Campo Contraseña -->
                                 <div class="mb-4">
                                     <label for="passwordInput" class="form-label fw-medium">Contraseña</label>
                                     <input type="password" class="form-control form-control-lg rounded-3" id="passwordInput" name="password" required>
+                                    <small class="help-text text-danger"></small>
                                 </div>
                                 
                                 <!-- Botón de Enviar -->
@@ -58,4 +93,7 @@
             </div>
         </div>
     </main>
+{% endblock %}
+{% block extra_js %}
+<script src="{% static 'js/iniciosesion.js' %}"></script>
 {% endblock %}

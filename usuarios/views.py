@@ -7,6 +7,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from .models import Usuario, PerfilJugador, PerfilEntrenador
 from django.http import JsonResponse
+from django.contrib import messages
 
 def login_view(request):
     if request.method == "GET":
@@ -21,9 +22,10 @@ def login_view(request):
 
     if user is not None:
         login(request, user)
-        return redirect('landing')  # o dashboard
+        messages.success(request, "Sesión inciada correctamente.")
+        return render(request, "usuarios/login.html")  # o dashboard
     else:
-        return render(request, 'usuarios/login.html', {'error': "El usuario no existe o la contraseña es incorrecta."})
+        return render(request, 'usuarios/login.html', {'error': "El usuario no existe o la contraseña es incorrecta.", "email_value": email})
 
 def signin(request):
     if request.method == "GET":
@@ -44,10 +46,10 @@ def signin(request):
 
         # 2. Validaciones básicas
         if password_1 != password_2:
-            return render(request, 'usuarios/signin.html', {'error': "Las contraseñas no coinciden."})
+            return render(request, 'usuarios/signin.html', {'error': "Las contraseñas no coinciden.", 'nombre_value': nombre, 'apellidos_value': apellidos, 'telefono_value': telefono, 'email_value': email, 'fechanacimiento_value': fechanacimiento, 'es_entrenador_value': es_entrenador, 'foto_value': foto})
         
         if Usuario.objects.filter(email=email).exists():
-            return render(request, 'usuarios/signin.html', {'error': "Este correo electrónico ya está registrado."})
+            return render(request, 'usuarios/signin.html', {'error': "Este correo electrónico ya está registrado.", 'nombre_value': nombre, 'apellidos_value': apellidos, 'telefono_value': telefono, 'email_value': email, 'fechanacimiento_value': fechanacimiento, 'es_entrenador_value': es_entrenador, 'foto_value': foto})
 
         # 3. Crear el Usuario
         try:
@@ -78,9 +80,9 @@ def signin(request):
 
             # 5. Iniciar sesión automáticamente y redirigir
             login(request, user)
-            
+            messages.success(request, "Te has registrado correctamente")
             # Redirigir a la página de inicio o dashboard
-            return redirect('landing') 
+            return render(request, "usuarios/signin.html")
 
         except Exception as e:
             # Si pasa algo raro, mostramos el error (útil en desarrollo)

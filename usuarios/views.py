@@ -4,10 +4,11 @@ from django.contrib.auth.views import PasswordResetView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.views import PasswordResetConfirmView
 from django.shortcuts import render, redirect
-from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth import login, authenticate, logout, update_session_auth_hash
 from .models import Usuario, PerfilJugador, PerfilEntrenador
 from django.http import JsonResponse
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 def login_view(request):
     if request.method == "GET":
@@ -88,13 +89,38 @@ def signin(request):
             # Si pasa algo raro, mostramos el error (útil en desarrollo)
             return render(request, 'usuarios/signin.html', {'error': f"Error al registrar: {str(e)}"})
 
+@login_required
 def logout_view(request):
     logout(request)
     return redirect('landing')  # o 'usuarios:login'
 
+@login_required
 def miperfil(request):
-    return render(request, 'usuarios/miperfil.html')
 
+    user = request.user
+
+    try:
+        if request.method == "POST":
+
+            user.first_name = request.POST.get("first_name")
+            user.last_name = request.POST.get("last_name")
+            user.telefono = request.POST.get("telefono")
+            user.fecha_nacimiento = request.POST.get("fecha_nacimiento")
+
+            if "foto" in request.FILES:
+                user.foto = request.FILES["foto"]
+
+            user.save()
+            messages.success(request, "Perfil actualizado correctamente")
+
+            return redirect("usuarios:miperfil")
+
+        return render(request, "usuarios/miperfil.html")
+    except Exception as e:
+            # Si pasa algo raro, mostramos el error (útil en desarrollo)
+            return render(request, 'usuarios/miperfil.html', {'error': f"Error al actualizar: {str(e)}"})
+    
+@login_required
 def eliminar_cuenta(request):
     if request.method == "POST":
         user = request.user

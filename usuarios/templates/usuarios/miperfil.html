@@ -47,7 +47,7 @@
 
             <li class="mb-2">
                 <strong>Rol:</strong>
-                {{ user.rol }}
+                {{ user.rol|capfirst }}
             </li>
 
             <li class="mb-2">
@@ -60,6 +60,44 @@
                 <strong>Último acceso:</strong>
                 {{ user.last_login|date:"d/m/Y H:i" }}
             </li>
+            {% endif %}
+
+            {% if user.tiene_equipo and user.rol == "jugador" %}
+            <h4 class="h5 text-foot-green fw-bold mb-3">
+                Información del jugador en su equipo
+            </h4>
+
+            <li class="mb-2">
+                <strong>Altura:</strong>
+                {{ user.perfil_jugador.altura }} cm
+            </li>
+
+            <li class="mb-2">
+                <strong>Peso:</strong>
+                {{ user.perfil_jugador.peso }} kg
+            </li>
+
+            <li class="mb-2">
+                <strong>Dorsal:</strong>
+                {{ user.perfil_jugador.dorsal }}
+            </li>
+
+            <li class="mb-2">
+                <strong>Pierna hábil:</strong>
+                {{ user.perfil_jugador.pierna_habil|capfirst }}
+            </li>
+
+            <li class="mb-2">
+                <strong>Es capitán:</strong>
+                {% if user.perfil_jugador.es_capitan %}
+                Sí
+                {% else %}
+                No
+                {% endif %}
+            </li>
+
+
+
             {% endif %}
         </ul>
 
@@ -75,49 +113,54 @@
                 </a>
             </div>
 
+            
             <!-- === MODAL DE ACTUALIZACIÓN === -->
             <div class="modal fade" id="updateProfileModal" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered modal-lg">
                     <div class="modal-content rounded-4 border-0 shadow">
-                        <div class="modal-header border-bottom-0">
-                            <h5 class="modal-title fw-bold" id="updateModalLabel" style="color: #27a770;">Actualizar Perfil</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <div class="modal-header border-bottom">
+                            <h5 class="modal-title fw-bold" id="updateModalLabel" style="color: #27a770;">Actualizar Información</h5>
                         </div>
                         
                         <div class="modal-body p-4">
-                            <form method="POST" enctype="multipart/form-data">
+                            <form id="formulario_editar_datos" method="POST" enctype="multipart/form-data">
                                 {% csrf_token %}
                                 <div class="row g-3">
                                     
                                     <!-- Nombre -->
                                     <div class="col-md-6">
-                                        <label for="firstName" class="form-label fw-medium">Nombre</label>
-                                        <input type="text" class="form-control rounded-3" id="firstName" name="first_name" value="{{ user.first_name }}">
+                                        <label for="nombre" class="form-label fw-medium">Nombre</label>
+                                        <input type="text" class="form-control rounded-3" id="nombre" name="first_name" value="{{ user.first_name }}">
+                                        <small id="errorNombre" class="help-text text-danger" aria-live="polite"></small>
                                     </div>
                                     
                                     <!-- Apellidos -->
                                     <div class="col-md-6">
-                                        <label for="lastName" class="form-label fw-medium">Apellidos</label>
-                                        <input type="text" class="form-control rounded-3" id="lastName" name="last_name" value="{{ user.last_name }}">
+                                        <label for="apellidos" class="form-label fw-medium">Apellidos</label>
+                                        <input type="text" class="form-control rounded-3" id="apellidos" name="last_name" value="{{ user.last_name }}">
+                                        <small id="errorApellidos" class="help-text text-danger" aria-live="polite"></small>
                                     </div>
 
                                     <!-- Email -->
                                     <div class="col-12">
                                         <label for="email" class="form-label fw-medium">Email</label>
-                                        <input type="email" class="form-control rounded-3" id="email" name="email" value="{{ user.email }}">
+                                        <input type="email" class="form-control rounded-3" id="email" name="email" value="{{ user.email }}" disabled>
+                                        <small id="errorEmail" class="help-text text-danger" aria-live="polite"></small>
                                     </div>
 
                                     <!-- Teléfono -->
                                     <div class="col-md-6">
-                                        <label for="phone" class="form-label fw-medium">Teléfono</label>
-                                        <input type="tel" class="form-control rounded-3" id="phone" name="telefono" value="{{ user.telefono|default:'' }}">
+                                        <label for="telefono" class="form-label fw-medium">Teléfono</label>
+                                        <input type="tel" class="form-control rounded-3" id="telefono" name="telefono" value="{{ user.telefono|default:'' }}">
+                                        <small id="errorTelefono" class="help-text text-danger" aria-live="polite"></small>
                                     </div>
 
                                     <!-- Fecha Nacimiento -->
                                     <div class="col-md-6">
-                                        <label for="dob" class="form-label fw-medium">Fecha de nacimiento</label>
+                                        <label for="fechanacimiento" class="form-label fw-medium">Fecha de nacimiento</label>
                                         <!-- Importante: |date:'Y-m-d' es necesario para que el input type="date" reconozca el valor -->
-                                        <input type="date" class="form-control rounded-3" id="dob" name="fecha_nacimiento" value="{{ user.fecha_nacimiento|date:'Y-m-d' }}">
+                                        <input type="date" class="form-control rounded-3" id="fechanacimiento" name="fecha_nacimiento" value="{{ user.fecha_nacimiento|date:'Y-m-d' }}">
+                                        <small id="errorFechaNacimiento" class="help-text text-danger" aria-live="polite"></small>
                                     </div>
 
                                     <!-- Foto -->
@@ -126,6 +169,17 @@
                                         <input type="file" class="form-control rounded-3" id="foto" name="foto" accept="image/*">
                                         <div class="form-text">Sube una nueva imagen solo si quieres cambiar la actual.</div>
                                     </div>
+
+                                    <div class="col-12">
+                                    <div class="form-text">
+                                        ¿Quieres cambiar tu contraseña?
+                                        <a href="{% url 'usuarios:password_forget' %}">
+                                            Solicitar cambio por correo
+                                        </a>
+                                        <div class="form-text">Por seguridad, el cambio de contraseña se realiza mediante correo electrónico.</div>
+                                    </div>
+                                </div>
+
 
                                 </div>
 
@@ -140,6 +194,42 @@
             </div>
             <!-- === FIN MODAL === -->
 
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="modal fade" id="modalRegistroOk" tabindex="-1">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                        <div class="modal-header bg-success">
+                            <h5 class="modal-title text-white">Información personal actualizada</h5>
+                        </div>
+                        <div class="modal-body">
+                            <p>{{ message }}</p>
+                        </div>
+                        </div>
+                    </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+
+            {% if error %}
+                <div class="modal fade" id="modalErrorActualizar" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                    <div class="modal-header bg-danger">
+                        <h5 class="modal-title text-white">Error al actualizar información</h5>
+                    </div>
+                    <div class="modal-body">
+                        <p>{{ error }}</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        Cerrar
+                        </button>
+                    </div>
+                    </div>
+                </div>
+                </div>
+            {% endif %}
 
             {% if user.rol == "jugador" %}
             <!-- Sección Lesiones -->
@@ -194,7 +284,6 @@
       
       <div class="modal-header">
         <h5 class="modal-title text-danger">Eliminar cuenta</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
 
       <div class="modal-body">
@@ -254,5 +343,7 @@
 
     </div>
 </div>
-<script src="{% static 'js/miperfil.js' %}"></script>
+{% endblock %}
+{% block extra_js %}
+<script src="{% static 'js/editarDatos.js' %}"></script>
 {% endblock %}

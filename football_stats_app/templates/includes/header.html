@@ -58,7 +58,7 @@
             {% if user.is_authenticated %}
 
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'landing' %}">Inicio</a>
+                    <a class="nav-link" href="{% url 'landing' %}"><i class="bi bi-house-fill"></i> Inicio</a>
                 </li>
 
                 {# ===== ENTRENADOR ===== #}
@@ -66,13 +66,13 @@
 
                     {% if user.tiene_equipo %}
                         <li class="nav-item">
-                            <a class="nav-link" href="">Equipo</a>
+                            <a class="nav-link" href=""><i class="bi bi-shield-fill"></i> Equipo</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="">Análisis</a>
+                            <a class="nav-link" href=""><i class="bi bi-pie-chart-fill"></i> Análisis</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="">Pizarra</a>
+                            <a class="nav-link" href=""><i class="bi bi-clipboard2-fill"></i> Pizarra</a>
                         </li>
                     {% endif %}
 
@@ -81,7 +81,7 @@
 
                     {% if user.tiene_equipo %}
                         <li class="nav-item">
-                            <a class="nav-link" href="">Mi equipo</a>
+                            <a class="nav-link" href=""><i class="bi bi-shield-fill"></i> Equipo</a>
                         </li>
                     {% endif %}
 
@@ -105,13 +105,13 @@
                     <ul class="dropdown-menu dropdown-menu-end">
                         <li>
                             <a class="dropdown-item" href="{% url 'usuarios:miperfil' %}">
-                                Mi perfil
+                                <i class="bi bi-person-lines-fill"></i> Mi perfil
                             </a>
                         </li>
                         <li><hr class="dropdown-divider"></li>
                         <li>
                             <a class="dropdown-item text-danger" href="{% url 'usuarios:logout' %}">
-                                Cerrar sesión
+                                <i class="bi bi-box-arrow-in-left"></i> Cerrar sesión
                             </a>
                         </li>
                     </ul>
@@ -121,7 +121,7 @@
 
                 {# ===== NO AUTENTICADO ===== #}
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'usuarios:login' %}"><i class="bi bi-person-circle"></i> Iniciar sesión</a>
+                    <a class="nav-link" href="{% url 'usuarios:login' %}">Iniciar sesión <i class="bi bi-box-arrow-in-right"></i></a>
                 </li>
                 <li class="nav-item ms-lg-3">
                     <a class="btn btn-foot-register-header px-3 py-2"

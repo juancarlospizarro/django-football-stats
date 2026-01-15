@@ -163,6 +163,8 @@ DEFAULT_FROM_EMAIL = 'futdatamanager@alwaysdata.net'
 
 AUTH_USER_MODEL = 'usuarios.Usuario'
 
+LOGIN_URL = '/auth/login/'  # Página de login
+
 # Cuando te logueas, vas a la raíz (que ahora es tu vista inteligente)
 LOGIN_REDIRECT_URL = '/' 
 

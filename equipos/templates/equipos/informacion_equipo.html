@@ -1,0 +1,243 @@
+{% extends "includes/base.html" %}
+{% load static %}
+
+{% block title %}Equipo {{ equipo.nombre }} - Información{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+
+    <div class="row gy-5">
+
+        <!-- COLUMNA IZQUIERDA -->
+        <div class="col-md-8 order-2 order-md-1">
+
+            <div class="mb-4">
+                <h2 class="h3 text-foot-green fw-bold mb-2">
+                    {{ equipo.nombre }}
+                </h2>
+                <div class="card shadow-sm border-0 mb-4">
+                    <div class="card-body">
+
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-2">
+                                <strong>Nombre:</strong>
+                                {{ equipo.nombre }}
+                            </li>
+
+                            <li class="mb-2">
+                                <strong>Año de fundación:</strong>
+                                {{ equipo.anio_fundacion }}
+                            </li>
+
+                            <li class="mb-2">
+                                <strong>Fecha de creación:</strong>
+                                {{ equipo.fecha_creacion|date:"d/m/Y H:i" }}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="mb-5">
+                <a href="#" class="btn btn-foot-form-enviar px-4 py-2" data-bs-toggle="modal"
+                    data-bs-target="#updateProfileModal">
+                    <i class="bi bi-shield-shaded"></i> Editar información de equipo
+                </a>
+            </div>
+
+
+            <!-- MODAL DE ACTUALIZACIÓN -->
+            <div class="modal fade" id="updateProfileModal" tabindex="-1" aria-labelledby="updateModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-lg">
+                    <div class="modal-content rounded-4 border-0 shadow">
+                        <div class="modal-header border-bottom">
+                            <h5 class="modal-title fw-bold" id="updateModalLabel" style="color: #27a770;"><i class="bi bi-shield-shaded"></i> Editar información de equipo</h5>
+                        </div>
+
+                        <div class="modal-body p-4">
+                            <form id="formulario_editar_datos" method="POST" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="row g-3">
+
+                                    <div class="col-md-6">
+                                        <label for="nombre" class="form-label fw-medium">Nombre</label>
+                                        <input type="text" class="form-control rounded-3" id="nombre" name="first_name"
+                                            value="{{ equipo.nombre }}">
+                                        <small id="errorNombre" class="help-text text-danger"
+                                            aria-live="polite"></small>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="anio_fundacion" class="form-label fw-medium">Año de fundación</label>
+                                        <input type="number" class="form-control rounded-3" id="anio_fundacion"
+                                            name="anio_fundacion" value="{{ equipo.anio_fundacion }}">
+                                        <small id="errorAnioFundacion" class="help-text text-danger"
+                                            aria-live="polite"></small>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <label for="direccion" class="form-label fw-medium">Dirección</label>
+                                        <input type="text" class="form-control rounded-3" id="direccion"
+                                            name="direccion" value="{{ equipo.direccion }}">
+                                        <small id="errorDireccion" class="help-text text-danger"
+                                            aria-live="polite"></small>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="color_principal" class="form-label fw-medium">Color principal</label>
+                                        <input type="color" class="form-control rounded-3" id="color_principal" name="color_principal"
+                                            value="{{ equipo.color_principal }}">
+                                        <small id="errorColorPrincipal" class="help-text text-danger" aria-live="polite"></small>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="color_secundario" class="form-label fw-medium">Color secundario</label>
+                                        <input type="color" class="form-control rounded-3" id="color_secundario" name="color_secundario"
+                                            value="{{ equipo.color_secundario }}">
+                                        <small id="errorColorSecundario" class="help-text text-danger"
+                                            aria-live="polite"></small>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <label for="escudo" class="form-label fw-medium">Escudo</label>
+                                        <input type="file" class="form-control rounded-3" id="escudo" name="escudo"
+                                            accept="image/*">
+                                        <div class="form-text">Sube una nueva imagen solo si quieres cambiar el escudo actual.
+                                        </div>
+                                    </div>
+
+                                        <!-- Vista previa -->
+                                    <div class="col-md-6 mt-3 text-center">
+                                        <img id="previewFoto"
+                                            src="{% if equipo.escudo %}{{ equipo.escudo.url }}{% else %}{% static 'img/default_shield.png' %}{% endif %}"
+                                            data-original="{% if equipo.escudo %}{{ equipo.escudo.url }}{% else %}{% static 'img/default_shield.png' %}{% endif %}"
+                                            alt="Vista previa" class="rounded-4 shadow-sm"
+                                            style="width: 200px; height: 200px; object-fit: cover;">
+                                    </div>
+
+                                </div>
+
+                                <div class="d-flex justify-content-end gap-2 mt-4">
+                                    <button type="button" class="btn btn-light text-secondary px-4 rounded-3"
+                                        data-bs-dismiss="modal">Cancelar</button>
+                                    <button type="submit" class="btn text-white px-4 rounded-3"
+                                        style="background-color: #27a770;">Guardar cambios</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- FIN MODAL -->
+
+            {% if messages %}
+            {% for message in messages %}
+            <div class="modal fade" id="modalRegistroOk" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header bg-success">
+                            <h5 class="modal-title text-white">Información del equipo actualizada</h5>
+                        </div>
+                        <div class="modal-body">
+                            <p>{{ message }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            {% endif %}
+
+            {% if error %}
+            <div class="modal fade" id="modalErrorActualizar" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header bg-danger">
+                            <h5 class="modal-title text-white">Error al actualizar información</h5>
+                        </div>
+                        <div class="modal-body">
+                            <p>{{ error }}</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                Cerrar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Sección Lesiones -->
+            <div class="mb-5">
+                <h3 class="h4 text-foot-green fw-bold mb-2">Entrenador</h3>
+                <p class="fs-5 text-secondary">Nombre del entrenador</p>
+            </div>
+
+            <!-- Sección Sanciones -->
+            <div class="mb-5">
+                <h3 class="h4 text-foot-green fw-bold mb-2">Plantilla</h3>
+                <p class="fs-5 text-secondary">Listado de jugadores del equipo</p>
+            </div>
+
+        </div>
+
+        <!-- COLUMNA DERECHA: Foto de Perfil (Orden 1 en móvil, 2 en escritorio) -->
+        <div class="col-md-4 order-1 order-md-2 d-flex flex-column align-items-center gap-4">
+
+            <!-- Lógica para mostrar la foto -->
+            {% if equipo.escudo %}
+            <!-- Si tiene foto subida -->
+            <img src="{{ equipo.escudo.url }}" alt="Escudo de equipo" class=""
+                style="width: 350px; height: 350px; object-fit: cover;">
+            {% else %}
+            <!-- Placeholder si no tiene foto (Imagen genérica o iniciales) -->
+            <!-- Usamos placehold.co con tus colores: fondo verde, texto blanco -->
+            <img src="{% static 'img/default_shield.png' %}" alt="Sin escudo" class=""
+                style="width: 350px; height: 350px; object-fit: cover;">
+            {% endif %}
+            <div class="w-100 card shadow-sm border-0">
+                <!-- Sección Lesiones -->
+            <div class="card-body text-center">
+                <h3 class="h4 text-foot-green fw-bold mb-2">Últimos resultados</h3>
+                <p class="fs-5 text-secondary">Últimos partidos del equipo</p>
+
+            <!-- Sección Sanciones -->
+                <h3 class="h4 text-foot-green fw-bold mb-2">Próximos partidos</h3>
+                <p class="fs-5 text-secondary">Próximos partidos del equipo</p>
+            </div>
+            
+
+        </div>
+
+        <div class="w-100 card shadow-sm border-0">
+        
+                        <div class="card-body">
+                            <h3 class="h5 text-foot-green fw-bold mb-3">
+                            Información de contacto
+                        </h3>
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-2">
+                                <strong>Teléfono:</strong>
+                                {{ equipo.telefono }}
+                            </li>
+                            <li class="mb-2">
+                                <strong>Dirección:</strong>
+                                {{ equipo.direccion }}
+                                <iframe width="100%" height="300" style="border:0; border-radius: 10px;" loading="lazy"
+                                    referrerpolicy="no-referrer-when-downgrade"
+                                    src="https://www.google.com/maps?q={{ equipo.direccion|urlencode }}&output=embed">
+                                </iframe>
+                            </li>
+                        </ul>
+                        </div>
+                        
+        </div>
+
+    </div>
+</div>
+{% endblock %}
+{% block extra_js %}
+<script src="{% static 'js/editarDatosEquipo.js' %}"></script>
+{% endblock %}

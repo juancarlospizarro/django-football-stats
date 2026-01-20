@@ -4,40 +4,80 @@
 {% block content %}
 <div class="container my-5">
 
-            <!-- Sección Título -->
-            <section class="text-center col-lg-8 mx-auto mb-5 py-5">
-                <h1 class="display-4 fw-bold text-foot-darkgray mb-3">¡Bienvenid@ {{ user.first_name }}!</h1>
-                <p class="fs-5 text-secondary">
-                    Actualmente no perteneces a ningún equipo.
-                </p>
-            </section>
+  <!-- Sección Título -->
+  <section class="text-center col-lg-8 mx-auto mb-5 py-5">
+    <h1 class="display-4 fw-bold text-foot-darkgray mb-3">¡Bienvenid@ {{ user.first_name }}!</h1>
+    <p class="fs-5 text-secondary">
+      Actualmente no perteneces a ningún equipo.
+    </p>
+  </section>
 
-            <!-- 2. Lista de Opciones -->
-    <section class="row justify-content-center">
-        <div class="col-lg-8">
-            <div class="d-flex flex-column gap-5">
-                
-                <!-- Opción A: Historial -->
-                <div>
-                    <!-- Usamos text-primary (que es tu verde) para los títulos -->
-                    <h2 class="h4 text-foot-green mb-2">Equipos donde ha jugado</h2>
-                    <p class="fs-5 text-secondary mb-0">Listado de equipos donde ha jugado</p>
-                </div>
+  <!-- Contenido -->
+  <section class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="d-flex flex-column gap-5">
 
-                <!-- Opción B: Estadísticas -->
-                <div>
-                    <h2 class="h4 text-foot-green mb-2">Estadísticas generales</h2>
-                    <p class="fs-5 text-secondary mb-0">Listado de estadísticas del jugador</p>
-                </div>
-
-                <!-- Opción C: Buscador -->
-                <div>
-                    <h2 class="h4 text-foot-green mb-2">Equipos registrados</h2>
-                    <p class="fs-5 text-secondary mb-0">Listado de equipos en la base de datos</p>
-                </div>
-
-            </div>
+        <!-- Historial -->
+        <div>
+          <h2 class="h4 text-foot-green mb-2">Equipos donde ha jugado</h2>
+          <p class="fs-5 text-secondary mb-0">Listado de equipos donde ha jugado</p>
         </div>
-    </section>
+
+        <!-- Estadísticas -->
+        <div>
+          <h2 class="h4 text-foot-green mb-2">Estadísticas generales</h2>
+          <p class="fs-5 text-secondary mb-0">Listado de estadísticas del jugador</p>
+        </div>
+
+        <!-- Equipos registrados -->
+        <div>
+          <h2 class="h4 text-foot-green mb-2">Equipos registrados</h2>
+          <div class="d-flex justify-content-end mb-3">
+            <div class="input-group w-50">
+              <span class="input-group-text bg-light">
+                <i class="bi bi-search"></i>
+              </span>
+              <input type="text" id="buscadorEquipos" class="form-control" placeholder="Buscar equipo">
+            </div>
+          </div>
+          <table id="tablaEquipos" class="table text-center table-bordered shadow-sm">
+            <thead>
+              <tr>
+                <th class="bg-success text-white text-center">Escudo</th>
+                <th id="ordenarNombreEquipo" class="bg-success text-white text-center">Nombre</th>
+                <th id="ordenarAnioFundacion" class="bg-success text-white text-center">Año de fundación</th>
+                <th class="bg-success"></th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {% for equipo in equipos %}
+              <tr>
+                {% if equipo.escudo %}
+                <td><img src="{{ equipo.escudo.url }}" class="me-2" width="40" height="40"></td>
+                {% else %}
+                <td><img src="{% static 'img/default_shield.png' %}" class="me-2" width="40" height="40"></td>
+                {% endif %}
+                <td>{{ equipo.nombre }}</td>
+                <td>{{ equipo.anio_fundacion }}</td>
+                <td><a class="nav-link text-decoration-none text-secondary"
+                    href="{% url 'equipos:informacion_equipo' equipo.slug %}"><i class="bi bi-eye-fill"></i>
+                    Ver equipo</a></td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="3">No hay equipos registrados.</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+  </section>
 </div>
+{% endblock %}
+{% block extra_js %}
+<script src="{% static 'js/listadoEquipos.js' %}"></script>
 {% endblock %}

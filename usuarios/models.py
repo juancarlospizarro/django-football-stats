@@ -64,7 +64,6 @@ class PerfilJugador(models.Model):
         default=PiernaHabil.DERECHA
     )
     
-    # Campo para saber si es capitán
     es_capitan = models.BooleanField(_('es capitán'), default=False)
 
     def __str__(self):
@@ -81,7 +80,6 @@ class PerfilEntrenador(models.Model):
         related_name='perfil_entrenador'
     )
     
-    # Ejemplo de campo específico: Licencia o Titulación
     licencia = models.CharField(_('número de licencia'), max_length=50, blank=True, null=True)
     experiencia_anos = models.PositiveIntegerField(_('años de experiencia'), default=0)
 

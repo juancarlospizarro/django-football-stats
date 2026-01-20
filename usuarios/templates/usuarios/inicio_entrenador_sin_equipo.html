@@ -4,12 +4,205 @@
 {% block content %}
 <div class="container my-5">
 
-            <!-- Sección Título -->
-            <section class="text-center col-lg-8 mx-auto mb-5 py-5">
-                <h1 class="display-4 fw-bold text-foot-darkgray mb-3">¡Bienvenid@ {{ user.first_name }}!</h1>
-                <p class="fs-5 text-secondary">
-                    Actualmente no perteneces a ningún equipo.
-                </p>
-            </section>
+    <!-- Sección Título -->
+    <section class="text-center col-lg-8 mx-auto mb-5 py-5">
+        <h1 class="display-4 fw-bold text-foot-darkgray mb-3">¡Bienvenid@ {{ user.first_name }}!</h1>
+        <p class="fs-5 text-secondary">
+            Actualmente no perteneces a ningún equipo.
+        </p>
+        <p>Puedes <a href="#crearEquipo" class="nav-link text-secondary text-decoration-underline">crear un equipo</a>crear un equipo y convertirse en su entrenador/a de forma sencilla.</p>
+    </section>
+
+    <!-- Contenido -->
+    <section class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="d-flex flex-column gap-5">
+
+                <!-- Historial -->
+                <div>
+                    <h2 class="h4 text-foot-green mb-2">Equipos donde ha entrenado</h2>
+                    <p class="fs-5 text-secondary mb-0">Listado de equipos donde ha entrenado</p>
+                </div>
+
+                <!-- Equipos registrados -->
+                <div>
+                    <h2 class="h4 text-foot-green mb-2">Equipos registrados</h2>
+                    <div class="d-flex justify-content-end mb-3">
+                        <div class="input-group w-50">
+                            <span class="input-group-text bg-light">
+                                <i class="bi bi-search"></i>
+                            </span>
+                            <input type="text" id="buscadorEquipos" class="form-control" placeholder="Buscar equipo">
+                        </div>
+                    </div>
+                    <table id="tablaEquipos" class="table text-center table-bordered shadow-sm">
+                        <thead>
+                            <tr>
+                                <th class="bg-success text-white text-center">Escudo</th>
+                                <th id="ordenarNombreEquipo" class="bg-success text-white text-center">Nombre</th>
+                                <th id="ordenarAnioFundacion" class="bg-success text-white text-center">Año de fundación</th>
+                                <th class="bg-success"></th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for equipo in equipos %}
+                            <tr>
+                                {% if equipo.escudo %}
+                                <td><img src="{{ equipo.escudo.url }}" class="me-2" width="40" height="40"></td>
+                                {% else %}
+                                <td><img src="{% static 'img/default_shield.png' %}" class="me-2" width="40"
+                                        height="40"></td>
+                                {% endif %}
+                                <td>{{ equipo.nombre }}</td>
+                                <td>{{ equipo.anio_fundacion }}</td>
+                                <td><a class="nav-link text-decoration-none text-secondary"
+                                        href="{% url 'equipos:informacion_equipo' equipo.slug %}"><i
+                                            class="bi bi-eye-fill"></i>
+                                        Ver equipo</a></td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="3">No hay equipos registrados.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+
+                <!-- Creación de Equipo -->
+                <div id="crearEquipo" class="card shadow-sm rounded-4 border-0 mt-3">
+                    <div class="card-body p-4 p-md-5">
+
+                        <div class="text-center mb-4">
+                            <h2 class="h3 fw-bold mb-2" style="color: #504847;">Crear nuevo equipo</h2>
+                            <p class="text-secondary">
+                                Crea un nuevo club y conviértete en su entrenador automáticamente.
+                            </p>
+                        </div>
+
+                        <form method="POST" enctype="multipart/form-data" action="{% url 'equipos:crear_equipo' %}">
+                            {% csrf_token %}
+
+                                        <div class="row g-3 mb-3">
+                            <div class="col-md-6 mb-4">
+                                <label for="nombreEquipo" class="form-label fw-medium">Nombre del equipo</label>
+                                <input type="text" class="form-control form-control-lg rounded-3" id="nombreEquipo"
+                                    name="nombre" required>
+                            </div>
+                                <div class="col-md-6">
+                                    <label for="anioFundacion" class="form-label fw-medium">Año de fundación</label>
+                                    <input type="number" class="form-control form-control-lg rounded-3"
+                                        id="anioFundacion" name="anio_fundacion" required>
+                                </div>
+                            </div>
+
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-6">
+                                    <label for="direccionEquipo" class="form-label fw-medium">Dirección</label>
+                                    <input type="text" class="form-control form-control-lg rounded-3"
+                                        id="direccionEquipo" name="direccion">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="telefonoEquipo" class="form-label fw-medium">Teléfono</label>
+                                    <input type="tel" class="form-control form-control-lg rounded-3" id="telefonoEquipo"
+                                        name="telefono">
+                                </div>
+                            </div>
+
+                            <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                    <label for="escudoEquipo" class="form-label fw-medium">Escudo</label>
+                                    <input type="file" class="form-control form-control-lg rounded-3" id="escudoEquipo"
+                                        name="escudo" accept="image/*">
+                                </div>
+                                    <!-- Vista previa -->
+                                    <div class="col-md-6 mt-3 text-center">
+                                        <img id="previewFoto"
+                                            src="{% if equipo.escudo %}{{ equipo.escudo.url }}{% else %}{% static 'img/default_shield.png' %}{% endif %}"
+                                            data-original="{% if equipo.escudo %}{{ equipo.escudo.url }}{% else %}{% static 'img/default_shield.png' %}{% endif %}"
+                                            alt="Vista previa" class="rounded-4 shadow-sm"
+                                            style="width: 200px; height: 200px; object-fit: cover;">
+                                    </div>
+                            </div>
+                            <div class="row g-3 mb-4">
+                                <div class="col-6">
+                                    <label for="colorPrincipal" class="form-label fw-medium">Color principal</label>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <input type="color" class="form-control form-control-color w-100 rounded-3"
+                                            id="colorPrincipal" name="color_principal" title="Elige el color principal">
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <label for="colorSecundario" class="form-label fw-medium">Color secundario</label>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <input type="color" class="form-control form-control-color w-100 rounded-3"
+                                            id="colorSecundario" name="color_secundario"
+                                            title="Elige el color secundario" value="#FFFFFF">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                                <button type="reset"
+                                    class="btn btn-light text-secondary px-4 rounded-3">Reiniciar</button>
+                                <button type="submit" class="btn btn-foot-form-enviar px-5 rounded-3">
+                                    Añadir equipo
+                                </button>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+
+            </div>
         </div>
+</div>
+</div>
+</section>
+
+{% if error %}
+<div class="modal fade" id="modalErrorCrearEquipo" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-danger">
+                <h5 class="modal-title text-white">Error al crear equipo</h5>
+            </div>
+            <div class="modal-body">
+                <p>{{ error }}</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    Cerrar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% if messages %}
+{% for message in messages %}
+<div class="modal fade" id="modalCrearEquipoOk" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-success">
+                <h5 class="modal-title text-white">Equipo creado</h5>
+            </div>
+            <div class="modal-body">
+                <p>{{ message }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+{% endif %}
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/crearEquipo.js' %}"></script>
+<script src="{% static 'js/listadoEquipos.js' %}"></script>
 {% endblock %}

@@ -1,8 +1,9 @@
 from django.urls import resolve, reverse
+from equipos.models import Equipo
 
 def breadcrumbs(request):
     """
-    Genera breadcrumbs dinámicos según la vista actual y la URL.
+    Generar breadcrumbs dinámicos según la vista actual y la URL.
     """
     crumbs = [
         {"name": "Inicio", "url": reverse("landing")},
@@ -13,11 +14,24 @@ def breadcrumbs(request):
         view_name = resolver_match.url_name
         kwargs = resolver_match.kwargs
 
-        # Perfil general
+        # ---------- Nivel 1: sección ----------
+        # if view_name in [
+        #     "miperfil", "login", "signin", "logout",
+        #     "eliminar_cuenta",
+        #     "password_forget", "password_forget_done",
+        #     "new_password", "new_password_done",
+        #     "informacion_equipo"
+        # ]:
+        #     crumbs.append({
+        #         "name": "Área privada",
+        #         "url": "#"
+        #     })
+
+        # ---------- Nivel 2: páginas concretas ----------
+
         if view_name == "miperfil":
             crumbs.append({"name": "Mi perfil", "url": reverse("usuarios:miperfil")})
 
-        # Otras vistas ejemplo
         elif view_name == "login":
             crumbs.append({"name": "Iniciar sesión", "url": reverse("usuarios:login")})
 
@@ -41,6 +55,21 @@ def breadcrumbs(request):
 
         elif view_name == "new_password_done":
             crumbs.append({"name": "Nueva contraseña", "url": reverse("usuarios:new_password_done")})
+
+        elif view_name == "informacion_equipo":
+            slug = kwargs.get("slug")
+
+            if slug:
+                equipo = Equipo.objects.get(slug=slug)
+
+                crumbs.append({
+                    "name": "Equipos",
+                })
+
+                crumbs.append({
+                    "name": equipo.nombre,   
+                    "url": reverse("equipos:informacion_equipo", args=[slug])
+                })
 
     except:
         # Si la URL no se resuelve correctamente, mostrar solo Inicio

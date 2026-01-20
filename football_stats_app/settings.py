@@ -44,7 +44,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'usuarios'
+    'football_stats_app',
+    'usuarios',
+    'equipos'
 ]
 
 MIDDLEWARE = [
@@ -70,11 +72,12 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'usuarios.context_processors.breadcrumbs',
+                'usuarios.context_processors.breadcrumbs'
             ],
         },
     },
 ]
+
 
 WSGI_APPLICATION = 'football_stats_app.wsgi.application'
 
@@ -133,7 +136,8 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 STATICFILES_DIRS = [
     BASE_DIR / 'football_stats_app' / 'static',
-    BASE_DIR / 'usuarios' / 'static'
+    BASE_DIR / 'usuarios' / 'static',
+    BASE_DIR / 'equipos' / 'static'
 ]
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
@@ -153,7 +157,7 @@ EMAIL_HOST = 'smtp-futdatamanager.alwaysdata.net'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True  # siempre que el puerto sea 587
 
-# Credenciales de tu cuenta de alwaysdata
+# Credenciales de la cuenta de alwaysdata
 EMAIL_HOST_USER = 'futdatamanager@alwaysdata.net'
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 
@@ -165,10 +169,8 @@ AUTH_USER_MODEL = 'usuarios.Usuario'
 
 LOGIN_URL = '/auth/login/'  # Página de login
 
-# Cuando te logueas, vas a la raíz (que ahora es tu vista inteligente)
 LOGIN_REDIRECT_URL = '/' 
 
-# Cuando te deslogueas, también vas a la raíz (landing de invitado)
 LOGOUT_REDIRECT_URL = '/'
 
 MEDIA_URL = '/media/'

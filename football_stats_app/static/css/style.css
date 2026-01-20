@@ -11947,4 +11947,32 @@ main {
   color: #dddddd;
 }
 
+table.dataTable thead th#ordenarNombreEquipo, table.dataTable thead th#ordenarAnioFundacion {
+  cursor: pointer;
+  position: relative;
+}
+table.dataTable thead th#ordenarNombreEquipo.sorting::after, table.dataTable thead th#ordenarAnioFundacion.sorting::after {
+  content: " ⇅";
+  font-size: 0.9rem;
+  margin-left: 6px;
+}
+table.dataTable thead th#ordenarNombreEquipo.sorting_asc::after, table.dataTable thead th#ordenarAnioFundacion.sorting_asc::after {
+  content: " ↑";
+}
+table.dataTable thead th#ordenarNombreEquipo.sorting_desc::after, table.dataTable thead th#ordenarAnioFundacion.sorting_desc::after {
+  content: " ↓";
+}
+
+.accordion-button:not(.collapsed) {
+  background-color: #f8f9fa; /* fondo claro */
+  color: #27a770; /* texto verde */
+  border-left: 5px solid #27a770;
+}
+
+/* Quitar el borde azul del foco */
+.accordion-button:focus {
+  box-shadow: none;
+  border-color: #27a770;
+}
+
 /*# sourceMappingURL=style.css.map */

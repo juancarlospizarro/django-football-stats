@@ -9,6 +9,7 @@ from .models import Usuario, PerfilJugador, PerfilEntrenador
 from django.http import JsonResponse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import PasswordResetForm
 
 def login_view(request):
     if request.method == "GET":
@@ -32,7 +33,7 @@ def signin(request):
     if request.method == "GET":
         return render(request, 'usuarios/signin.html')
     else:
-        # 1. Obtener datos del formulario
+        # Obtener datos del formulario
         nombre = request.POST.get('nombre')
         apellidos = request.POST.get('apellidos')
         telefono = request.POST.get('telefono')
@@ -40,19 +41,17 @@ def signin(request):
         fechanacimiento = request.POST.get('fechanacimiento')
         password_1 = request.POST.get('password1')
         password_2 = request.POST.get('password2')
-        # Checkbox: Si está marcado devuelve 'true', si no devuelve None
         es_entrenador = request.POST.get('es_entrenador') 
         # Archivos: Las imágenes van en request.FILES, no en POST
         foto = request.FILES.get('foto') 
 
-        # 2. Validaciones básicas
         if password_1 != password_2:
             return render(request, 'usuarios/signin.html', {'error': "Las contraseñas no coinciden.", 'nombre_value': nombre, 'apellidos_value': apellidos, 'telefono_value': telefono, 'email_value': email, 'fechanacimiento_value': fechanacimiento, 'es_entrenador_value': es_entrenador, 'foto_value': foto})
         
         if Usuario.objects.filter(email=email).exists():
             return render(request, 'usuarios/signin.html', {'error': "Este correo electrónico ya está registrado.", 'nombre_value': nombre, 'apellidos_value': apellidos, 'telefono_value': telefono, 'email_value': email, 'fechanacimiento_value': fechanacimiento, 'es_entrenador_value': es_entrenador, 'foto_value': foto})
 
-        # 3. Crear el Usuario
+        # Crear el Usuario
         try:
             # Usamos 'create_user' que se encarga de encriptar la contraseña automáticamente
             user = Usuario.objects.create_user(
@@ -63,10 +62,10 @@ def signin(request):
                 fecha_nacimiento=fechanacimiento,
                 email=email,
                 password=password_1,
-                foto=foto # Guardamos la foto si la hay
+                foto=foto
             )
 
-            # 4. Asignar Rol y Crear Perfil Específico
+            # Asignar Rol y Crear Perfil Específico
             if es_entrenador:
                 user.rol = Usuario.Rol.ENTRENADOR
                 # Creamos la ficha de entrenador vacía asociada a este usuario
@@ -76,23 +75,22 @@ def signin(request):
                 # Creamos la ficha de jugador vacía asociada a este usuario
                 PerfilJugador.objects.create(usuario=user)
             
-            # Guardamos el cambio de rol
             user.save()
 
-            # 5. Iniciar sesión automáticamente y redirigir
+            # Iniciar sesión automáticamente y redirigir
             login(request, user)
             messages.success(request, "Te has registrado correctamente")
-            # Redirigir a la página de inicio o dashboard
+            # Redirigir a la página de inicio
             return render(request, "usuarios/signin.html")
 
         except Exception as e:
-            # Si pasa algo raro, mostramos el error (útil en desarrollo)
+            # Si pasa algo raro, mostramos el error
             return render(request, 'usuarios/signin.html', {'error': f"Error al registrar: {str(e)}"})
 
 @login_required
 def logout_view(request):
     logout(request)
-    return redirect('landing')  # o 'usuarios:login'
+    return redirect('landing')
 
 @login_required
 def miperfil(request):
@@ -117,7 +115,7 @@ def miperfil(request):
 
         return render(request, "usuarios/miperfil.html")
     except Exception as e:
-            # Si pasa algo raro, mostramos el error (útil en desarrollo)
+            # Si pasa algo raro, mostramos el error
             return render(request, 'usuarios/miperfil.html', {'error': f"Error al actualizar: {str(e)}"})
     
 @login_required
@@ -136,6 +134,30 @@ class ResetPasswordView(SuccessMessageMixin, PasswordResetView):
     subject_template_name = 'usuarios/password_forget_subject.txt'
     success_url = reverse_lazy('usuarios:password_forget_done')
     html_email_template_name = 'usuarios/password_forget_email.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        # 👉 Si el usuario YA está logueado, enviamos el correo directamente
+        if request.user.is_authenticated:
+            form = PasswordResetForm({'email': request.user.email})
+
+            if form.is_valid():
+                form.save(
+                    request=request,
+                    use_https=request.is_secure(),
+                    subject_template_name = self.subject_template_name,
+                    email_template_name=self.email_template_name,
+                    html_email_template_name=self.html_email_template_name,
+                )
+
+                messages.success(
+                    request,
+                    "Te hemos enviado un correo para cambiar tu contraseña."
+                )
+
+                return redirect("usuarios:miperfil")
+
+        # 👉 Si NO está logueado, seguimos el flujo normal de Django
+        return super().dispatch(request, *args, **kwargs)
 
 
 class CustomPasswordResetConfirmView(PasswordResetConfirmView):

@@ -5,12 +5,12 @@
 
 {% block content %}
 <div class="container my-5">
-    
+
     <div class="row gy-5">
-        
+
         <!-- COLUMNA IZQUIERDA: Información y Botones (Orden 2 en móvil, 1 en escritorio) -->
         <div class="col-md-8 order-2 order-md-1">
-            
+
             <!-- Encabezado con Nombre -->
             <div class="mb-4">
                 <!-- Usamos text-primary que es tu verde corporativo -->
@@ -18,174 +18,197 @@
                     {{ user.first_name }} {{ user.last_name }}
                 </h2>
                 <div class="card shadow-sm border-0 mb-4">
-    <div class="card-body">
+                    <div class="card-body">
 
-        <h3 class="h5 text-foot-green fw-bold mb-3">
-            Información general del jugador
-        </h3>
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-2">
+                                <strong>Nombre:</strong>
+                                {{ user.first_name }} {{ user.last_name }}
+                            </li>
 
-        <ul class="list-unstyled mb-0">
-            <li class="mb-2">
-                <strong>Nombre:</strong>
-                {{ user.first_name }} {{ user.last_name }}
-            </li>
+                            <li class="mb-2">
+                                <strong>Email:</strong>
+                                {{ user.email }}
+                            </li>
 
-            <li class="mb-2">
-                <strong>Email:</strong>
-                {{ user.email }}
-            </li>
+                            <li class="mb-2">
+                                <strong>Teléfono:</strong>
+                                {{ user.telefono }}
+                            </li>
 
-            <li class="mb-2">
-                <strong>Teléfono:</strong>
-                {{ user.telefono }}
-            </li>
+                            <li class="mb-2">
+                                <strong>Fecha de nacimiento:</strong>
+                                {{ user.fecha_nacimiento|date:"d/m/Y" }}
+                            </li>
 
-            <li class="mb-2">
-                <strong>Fecha de nacimiento:</strong>
-                {{ user.fecha_nacimiento|date:"d/m/Y" }}
-            </li>
+                            <li class="mb-2">
+                                <strong>Rol:</strong>
+                                {{ user.rol|capfirst }}
+                            </li>
 
-            <li class="mb-2">
-                <strong>Rol:</strong>
-                {{ user.rol|capfirst }}
-            </li>
+                            <li class="mb-2">
+                                <strong>Fecha de registro:</strong>
+                                {{ user.date_joined|date:"d/m/Y" }}
+                            </li>
 
-            <li class="mb-2">
-                <strong>Fecha de registro:</strong>
-                {{ user.date_joined|date:"d/m/Y" }}
-            </li>
+                            {% if user.last_login %}
+                            <li class="mb-2">
+                                <strong>Último acceso:</strong>
+                                {{ user.last_login|date:"d/m/Y H:i" }}
+                            </li>
+                            {% endif %}
 
-            {% if user.last_login %}
-            <li class="mb-2">
-                <strong>Último acceso:</strong>
-                {{ user.last_login|date:"d/m/Y H:i" }}
-            </li>
-            {% endif %}
+                            {% if user.tiene_equipo and user.rol == "jugador" %}
+                            <h4 class="h5 text-foot-green fw-bold mb-3">
+                                Información del jugador en su equipo
+                            </h4>
 
-            {% if user.tiene_equipo and user.rol == "jugador" %}
-            <h4 class="h5 text-foot-green fw-bold mb-3">
-                Información del jugador en su equipo
-            </h4>
+                            <li class="mb-2">
+                                <strong>Altura:</strong>
+                                {{ user.perfil_jugador.altura }} cm
+                            </li>
 
-            <li class="mb-2">
-                <strong>Altura:</strong>
-                {{ user.perfil_jugador.altura }} cm
-            </li>
+                            <li class="mb-2">
+                                <strong>Peso:</strong>
+                                {{ user.perfil_jugador.peso }} kg
+                            </li>
 
-            <li class="mb-2">
-                <strong>Peso:</strong>
-                {{ user.perfil_jugador.peso }} kg
-            </li>
+                            <li class="mb-2">
+                                <strong>Dorsal:</strong>
+                                {{ user.perfil_jugador.dorsal }}
+                            </li>
 
-            <li class="mb-2">
-                <strong>Dorsal:</strong>
-                {{ user.perfil_jugador.dorsal }}
-            </li>
+                            <li class="mb-2">
+                                <strong>Pierna hábil:</strong>
+                                {{ user.perfil_jugador.pierna_habil|capfirst }}
+                            </li>
 
-            <li class="mb-2">
-                <strong>Pierna hábil:</strong>
-                {{ user.perfil_jugador.pierna_habil|capfirst }}
-            </li>
-
-            <li class="mb-2">
-                <strong>Es capitán:</strong>
-                {% if user.perfil_jugador.es_capitan %}
-                Sí
-                {% else %}
-                No
-                {% endif %}
-            </li>
+                            <li class="mb-2">
+                                <strong>Es capitán:</strong>
+                                {% if user.perfil_jugador.es_capitan %}
+                                Sí
+                                {% else %}
+                                No
+                                {% endif %}
+                            </li>
 
 
 
-            {% endif %}
-        </ul>
+                            {% endif %}
+                        </ul>
 
-    </div>
-</div>
+                    </div>
+                </div>
 
             </div>
 
             <!-- Botón Actualizar Información -->
             <div class="mb-5">
-                <a href="#" class="btn btn-foot-form-enviar px-4 py-2" data-bs-toggle="modal" data-bs-target="#updateProfileModal">
-                    Actualizar información
+                <a href="#" class="btn btn-foot-form-enviar px-4 py-2" data-bs-toggle="modal"
+                    data-bs-target="#updateProfileModal">
+                    <i class="bi bi-person-lines-fill"></i> Editar información personal
                 </a>
             </div>
 
-            
+
             <!-- === MODAL DE ACTUALIZACIÓN === -->
-            <div class="modal fade" id="updateProfileModal" tabindex="-1" aria-labelledby="updateModalLabel" aria-hidden="true">
+            <div class="modal fade" id="updateProfileModal" tabindex="-1" aria-labelledby="updateModalLabel"
+                aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered modal-lg">
                     <div class="modal-content rounded-4 border-0 shadow">
                         <div class="modal-header border-bottom">
-                            <h5 class="modal-title fw-bold" id="updateModalLabel" style="color: #27a770;">Actualizar Información</h5>
+                            <h5 class="modal-title fw-bold" id="updateModalLabel" style="color: #27a770;"><i
+                                    class="bi bi-person-lines-fill"></i> Editar información personal</h5>
                         </div>
-                        
+
                         <div class="modal-body p-4">
                             <form id="formulario_editar_datos" method="POST" enctype="multipart/form-data">
                                 {% csrf_token %}
                                 <div class="row g-3">
-                                    
+
                                     <!-- Nombre -->
                                     <div class="col-md-6">
                                         <label for="nombre" class="form-label fw-medium">Nombre</label>
-                                        <input type="text" class="form-control rounded-3" id="nombre" name="first_name" value="{{ user.first_name }}">
-                                        <small id="errorNombre" class="help-text text-danger" aria-live="polite"></small>
+                                        <input type="text" class="form-control rounded-3" id="nombre" name="first_name"
+                                            value="{{ user.first_name }}">
+                                        <small id="errorNombre" class="help-text text-danger"
+                                            aria-live="polite"></small>
                                     </div>
-                                    
+
                                     <!-- Apellidos -->
                                     <div class="col-md-6">
                                         <label for="apellidos" class="form-label fw-medium">Apellidos</label>
-                                        <input type="text" class="form-control rounded-3" id="apellidos" name="last_name" value="{{ user.last_name }}">
-                                        <small id="errorApellidos" class="help-text text-danger" aria-live="polite"></small>
+                                        <input type="text" class="form-control rounded-3" id="apellidos"
+                                            name="last_name" value="{{ user.last_name }}">
+                                        <small id="errorApellidos" class="help-text text-danger"
+                                            aria-live="polite"></small>
                                     </div>
 
                                     <!-- Email -->
                                     <div class="col-12">
                                         <label for="email" class="form-label fw-medium">Email</label>
-                                        <input type="email" class="form-control rounded-3" id="email" name="email" value="{{ user.email }}" disabled>
+                                        <input type="email" class="form-control rounded-3" id="email" name="email"
+                                            value="{{ user.email }}" disabled>
                                         <small id="errorEmail" class="help-text text-danger" aria-live="polite"></small>
                                     </div>
 
                                     <!-- Teléfono -->
                                     <div class="col-md-6">
                                         <label for="telefono" class="form-label fw-medium">Teléfono</label>
-                                        <input type="tel" class="form-control rounded-3" id="telefono" name="telefono" value="{{ user.telefono|default:'' }}">
-                                        <small id="errorTelefono" class="help-text text-danger" aria-live="polite"></small>
+                                        <input type="tel" class="form-control rounded-3" id="telefono" name="telefono"
+                                            value="{{ user.telefono|default:'' }}">
+                                        <small id="errorTelefono" class="help-text text-danger"
+                                            aria-live="polite"></small>
                                     </div>
 
                                     <!-- Fecha Nacimiento -->
                                     <div class="col-md-6">
-                                        <label for="fechanacimiento" class="form-label fw-medium">Fecha de nacimiento</label>
+                                        <label for="fechanacimiento" class="form-label fw-medium">Fecha de
+                                            nacimiento</label>
                                         <!-- Importante: |date:'Y-m-d' es necesario para que el input type="date" reconozca el valor -->
-                                        <input type="date" class="form-control rounded-3" id="fechanacimiento" name="fecha_nacimiento" value="{{ user.fecha_nacimiento|date:'Y-m-d' }}">
-                                        <small id="errorFechaNacimiento" class="help-text text-danger" aria-live="polite"></small>
+                                        <input type="date" class="form-control rounded-3" id="fechanacimiento"
+                                            name="fecha_nacimiento" value="{{ user.fecha_nacimiento|date:'Y-m-d' }}">
+                                        <small id="errorFechaNacimiento" class="help-text text-danger"
+                                            aria-live="polite"></small>
                                     </div>
 
                                     <!-- Foto -->
-                                    <div class="col-12">
+                                    <div class="col-md-6">
                                         <label for="foto" class="form-label fw-medium">Foto de perfil</label>
-                                        <input type="file" class="form-control rounded-3" id="foto" name="foto" accept="image/*">
-                                        <div class="form-text">Sube una nueva imagen solo si quieres cambiar la actual.</div>
+                                        <input type="file" class="form-control rounded-3" id="foto" name="foto"
+                                            accept="image/*">
+                                        <div class="form-text">Sube una nueva imagen solo si quieres cambiar la actual.
+                                        </div>
+                                    </div>
+
+                                    <!-- Vista previa -->
+                                    <div class="col-md-6 mt-3 text-center">
+                                        <img id="previewFoto"
+                                            src="{% if user.foto %}{{ user.foto.url }}{% else %}{% static 'img/default_avatar.jpg' %}{% endif %}"
+                                            data-original="{% if user.foto %}{{ user.foto.url }}{% else %}{% static 'img/default_avatar.jpg' %}{% endif %}"
+                                            alt="Vista previa" class="rounded-4 shadow-sm"
+                                            style="width: 200px; height: 200px; object-fit: cover;">
                                     </div>
 
                                     <div class="col-12">
-                                    <div class="form-text">
-                                        ¿Quieres cambiar tu contraseña?
-                                        <a href="{% url 'usuarios:password_forget' %}">
-                                            Solicitar cambio por correo
-                                        </a>
-                                        <div class="form-text">Por seguridad, el cambio de contraseña se realiza mediante correo electrónico.</div>
+                                        <div class="form-text">
+                                            ¿Quieres cambiar tu contraseña?
+                                            <a href="{% url 'usuarios:password_forget' %}">
+                                                Solicitar cambio por correo
+                                            </a>
+                                            <div class="form-text">Por seguridad, el cambio de contraseña se realiza
+                                                mediante correo electrónico.</div>
+                                        </div>
                                     </div>
-                                </div>
 
 
                                 </div>
 
                                 <div class="d-flex justify-content-end gap-2 mt-4">
-                                    <button type="button" class="btn btn-light text-secondary px-4 rounded-3" data-bs-dismiss="modal">Cancelar</button>
-                                    <button type="submit" class="btn text-white px-4 rounded-3" style="background-color: #27a770;">Guardar cambios</button>
+                                    <button type="button" class="btn btn-light text-secondary px-4 rounded-3"
+                                        data-bs-dismiss="modal">Cancelar</button>
+                                    <button type="submit" class="btn text-white px-4 rounded-3"
+                                        style="background-color: #27a770;">Guardar cambios</button>
                                 </div>
                             </form>
                         </div>
@@ -195,40 +218,40 @@
             <!-- === FIN MODAL === -->
 
             {% if messages %}
-                {% for message in messages %}
-                    <div class="modal fade" id="modalRegistroOk" tabindex="-1">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
+            {% for message in messages %}
+            <div class="modal fade" id="modalRegistroOk" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
                         <div class="modal-header bg-success">
                             <h5 class="modal-title text-white">Información personal actualizada</h5>
                         </div>
                         <div class="modal-body">
                             <p>{{ message }}</p>
                         </div>
-                        </div>
                     </div>
-                    </div>
-                {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
             {% endif %}
 
             {% if error %}
-                <div class="modal fade" id="modalErrorActualizar" tabindex="-1">
+            <div class="modal fade" id="modalErrorActualizar" tabindex="-1">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
-                    <div class="modal-header bg-danger">
-                        <h5 class="modal-title text-white">Error al actualizar información</h5>
-                    </div>
-                    <div class="modal-body">
-                        <p>{{ error }}</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                        Cerrar
-                        </button>
-                    </div>
+                        <div class="modal-header bg-danger">
+                            <h5 class="modal-title text-white">Error al actualizar información</h5>
+                        </div>
+                        <div class="modal-body">
+                            <p>{{ error }}</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                Cerrar
+                            </button>
+                        </div>
                     </div>
                 </div>
-                </div>
+            </div>
             {% endif %}
 
             {% if user.rol == "jugador" %}
@@ -250,95 +273,88 @@
                 <h3 class="h4 text-foot-green fw-bold mb-2">Equipos a los que ha entrenado</h3>
                 <p class="fs-5 text-secondary">Información equipos que el entrenador ha entrenado</p>
             </div>
-                {% if user.tiene_equipo %}
-                <!-- Sección Estadisticas Equipo Actual -->
-                <div class="mb-5">
-                    <h3 class="h4 text-foot-green fw-bold mb-2">Estadísticas del equipo actual</h3>
-                    <p class="fs-5 text-secondary">Estadisticas del equipo actual del entrenador</p>
-                </div>
-                {% endif %}
+            {% if user.tiene_equipo %}
+            <!-- Sección Estadisticas Equipo Actual -->
+            <div class="mb-5">
+                <h3 class="h4 text-foot-green fw-bold mb-2">Estadísticas del equipo actual</h3>
+                <p class="fs-5 text-secondary">Estadisticas del equipo actual del entrenador</p>
+            </div>
+            {% endif %}
 
             {% endif %}
             <!-- Botones de Acción (Zona de Peligro) -->
             <div class="d-flex flex-wrap gap-3 mt-5 pt-3">
                 <!-- Botón Cerrar Sesión (Gris Oscuro) -->
-                <a href="{% url 'usuarios:logout' %}" class="btn text-white px-4 py-2 rounded-3 border-0" 
-                   style="background-color: #504847;">
+                <a href="{% url 'usuarios:logout' %}" class="btn text-white px-4 py-2 rounded-3 border-0"
+                    style="background-color: #504847;">
                     Cerrar sesión
                 </a>
-                
+
                 <!-- Botón Eliminar Cuenta (Gris Oscuro) -->
-                <button 
-                type="button"
-                class="btn text-white px-4 py-2 rounded-3 border-0"
-                style="background-color: #504847;"
-                data-bs-toggle="modal"
-                data-bs-target="#confirmDeleteModal"
-            >
-                Eliminar cuenta
-            </button>
+                <button type="button" class="btn text-white px-4 py-2 rounded-3 border-0"
+                    style="background-color: #504847;" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">
+                    Eliminar cuenta
+                </button>
 
-            <div class="modal fade" id="confirmDeleteModal" tabindex="-1">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content rounded-4">
-      
-      <div class="modal-header">
-        <h5 class="modal-title text-danger">Eliminar cuenta</h5>
-      </div>
+                <div class="modal fade" id="confirmDeleteModal" tabindex="-1">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content rounded-4">
 
-      <div class="modal-body">
-        <p>
-          ⚠️ Esta acción <strong>no se puede deshacer</strong>.<br>
-          ¿Estás seguro de que quieres eliminar tu cuenta?
-        </p>
-      </div>
+                            <div class="modal-header">
+                                <h5 class="modal-title text-danger">Eliminar cuenta</h5>
+                            </div>
 
-      <div class="modal-footer">
-        <button class="btn btn-secondary" data-bs-dismiss="modal">
-          Cancelar
-        </button>
+                            <div class="modal-body">
+                                <p>
+                                    ⚠️ Esta acción <strong>no se puede deshacer</strong>.<br>
+                                    ¿Estás seguro de que quieres eliminar tu cuenta?
+                                </p>
+                            </div>
 
-        <button class="btn btn-danger" id="confirmDeleteBtn" data-url="{% url 'usuarios:eliminar_cuenta' %}">
-          Sí, eliminar cuenta
-        </button>
-      </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-secondary" data-bs-dismiss="modal">
+                                    Cancelar
+                                </button>
 
-    </div>
-  </div>
-</div>
+                                <button class="btn btn-danger" id="confirmDeleteBtn"
+                                    data-url="{% url 'usuarios:eliminar_cuenta' %}">
+                                    Sí, eliminar cuenta
+                                </button>
+                            </div>
 
-<div class="modal fade" id="deletedSuccessModal" tabindex="-1">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content rounded-4 text-center p-4">
+                        </div>
+                    </div>
+                </div>
 
-      <h5 class="text-success mb-3">Cuenta eliminada</h5>
-      <p>Tu cuenta ha sido eliminada correctamente.</p>
+                <div class="modal fade" id="deletedSuccessModal" tabindex="-1">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content rounded-4 text-center p-4">
 
-    </div>
-  </div>
-</div>
+                            <h5 class="text-success mb-3">Cuenta eliminada</h5>
+                            <p>Tu cuenta ha sido eliminada correctamente.</p>
+
+                        </div>
+                    </div>
+                </div>
             </div>
 
         </div>
 
         <!-- COLUMNA DERECHA: Foto de Perfil (Orden 1 en móvil, 2 en escritorio) -->
         <div class="col-md-4 order-1 order-md-2 d-flex justify-content-center justify-content-md-end align-items-start">
-            
+
             <!-- Lógica para mostrar la foto -->
             {% if user.foto %}
-                <!-- Si tiene foto subida -->
-                <img src="{{ user.foto.url }}" alt="Foto de perfil" 
-                     class="rounded-circle shadow-sm bg-light"
-                     style="width: 220px; height: 220px; object-fit: cover;">
+            <!-- Si tiene foto subida -->
+            <img src="{{ user.foto.url }}" alt="Foto de perfil" class="rounded-4 shadow-sm"
+                style="width: 350px; height: 350px; object-fit: cover;">
             {% else %}
-                <!-- Placeholder si no tiene foto (Imagen genérica o iniciales) -->
-                <!-- Usamos placehold.co con tus colores: fondo verde, texto blanco -->
-                <img src="{% static 'img/default_avatar.jpg' %}" 
-                     alt="Sin foto" 
-                     class="rounded-circle shadow-sm"
-                     style="width: 220px; height: 220px; object-fit: cover;">
+            <!-- Placeholder si no tiene foto (Imagen genérica o iniciales) -->
+            <!-- Usamos placehold.co con tus colores: fondo verde, texto blanco -->
+            <img src="{% static 'img/default_avatar.jpg' %}" alt="Sin foto" class="rounded-4 shadow-sm"
+                style="width: 350px; height: 350px; object-fit: cover;">
             {% endif %}
-            
+
         </div>
 
     </div>

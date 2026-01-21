@@ -1,0 +1,41 @@
+# ===== Backend =====
+*.py linguist-language=Python
+
+# ===== Templates =====
+*.html linguist-vendored
+
+# ===== Static files =====
+*.js linguist-vendored
+*.css linguist-vendored
+*.scss linguist-vendored
+*.map linguist-vendored
+
+# ===== Media / Assets =====
+*.png linguist-vendored
+*.jpg linguist-vendored
+*.jpeg linguist-vendored
+*.gif linguist-vendored
+*.svg linguist-vendored
+*.webp linguist-vendored
+
+# ===== Fonts =====
+*.woff linguist-vendored
+*.woff2 linguist-vendored
+*.ttf linguist-vendored
+
+# ===== Data / Config =====
+*.json linguist-vendored
+*.yml linguist-vendored
+*.yaml linguist-vendored
+
+# ===== Django typical folders =====
+static/* linguist-vendored
+media/* linguist-vendored
+templates/* linguist-vendored
+
+# ===== Migrations =====
+*/migrations/* linguist-vendored
+
+# ===== Virtualenv =====
+.venv/* linguist-vendored
+env/* linguist-vendored

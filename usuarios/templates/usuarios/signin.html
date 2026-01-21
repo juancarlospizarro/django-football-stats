@@ -73,7 +73,7 @@
 
                                 <div class="mb-3">
                                     <label for="telefono" class="form-label fw-medium">Teléfono*</label>
-                                    <input type="text" class="form-control form-control-lg rounded-3" id="telefono" name="telefono" value="{{ telefono_value|default:'' }}" required>
+                                    <input type="text" class="form-control form-control-lg rounded-3" id="telefono" name="telefono" value="{{ telefono_value|default:'' }}" placeholder="Número de 9 dígitos" required>
                                     <small id="errorTelefono" class="help-text text-danger" aria-live="polite"></small>
                                 </div>
 
@@ -91,7 +91,7 @@
 
                                 <div class="mb-3">
                                     <label for="emailInput" class="form-label fw-medium">Correo electrónico*</label>
-                                    <input type="email" class="form-control form-control-lg rounded-3" id="emailInput" name="email" value="{{ email_value|default:'' }}" required>
+                                    <input type="email" class="form-control form-control-lg rounded-3" id="emailInput" name="email" value="{{ email_value|default:'' }}" placeholder="nombre@dominio.com" required>
                                     <small id="errorEmail" class="help-text text-danger" aria-live="polite"></small>
                                 </div>
                                 

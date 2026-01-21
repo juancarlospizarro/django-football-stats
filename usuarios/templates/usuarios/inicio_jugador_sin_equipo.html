@@ -64,10 +64,6 @@
                     href="{% url 'equipos:informacion_equipo' equipo.slug %}"><i class="bi bi-eye-fill"></i>
                     Ver equipo</a></td>
               </tr>
-              {% empty %}
-              <tr>
-                <td colspan="4">No hay equipos registrados.</td>
-              </tr>
               {% endfor %}
             </tbody>
           </table>

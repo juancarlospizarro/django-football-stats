@@ -6,6 +6,7 @@ $(document).ready(function() {
         "pageLength": 5,  // Número de filas por página
         "lengthChange": false,  // Oculta el selector de filas por página
         "language": {             // Dejamos el placeholder vacío si usamos input custom
+            emptyTable: "No hay equipos registrados",
             "paginate": {
                 "previous": "«",
                 "next": "»"

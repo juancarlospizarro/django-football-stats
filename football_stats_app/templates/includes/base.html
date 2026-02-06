@@ -21,7 +21,7 @@
     {% include "includes/header.html" %}
     {% if breadcrumbs %}
     <nav aria-label="breadcrumb" class="container mt-3 mb-0">
-        <ol class="breadcrumb">
+        <ol class="breadcrumb justify-content-center justify-content-md-start breadcrumb-custom-divider text-secondary">
             {% for crumb in breadcrumbs %}
                 {% if crumb.url %}
                     <li class="breadcrumb-item">

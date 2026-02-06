@@ -143,3 +143,16 @@ GitHub.sublime-settings
 !.vscode/launch.json 
 !.vscode/extensions.json 
 .history
+
+# Docker
+Dockerfile
+docker-compose.yml
+.dockerignore
+create_superuser.sh
+
+# Volúmenes de Docker
+data/
+postgres_data/
+
+# Contenedores y imágenes
+.docker/

@@ -11873,7 +11873,7 @@ body.dark-mode {
   --primary: #27a770;
   --secondary: #ffffff;
   --tertiary: #121212;
-  --background: #121212;
+  --background: #151922;
 }
 
 .breadcrumb a {
@@ -11947,20 +11947,29 @@ main {
   color: #dddddd;
 }
 
-table.dataTable thead th#ordenarNombreEquipo, table.dataTable thead th#ordenarAnioFundacion {
+table.dataTable thead th#ordenarNombreEquipo, table.dataTable thead th#ordenarAnioFundacion, table.dataTable thead th#ordenarDorsal, table.dataTable thead th#ordenarJugador, table.dataTable thead th#ordenarAltura, table.dataTable thead th#ordenarPeso {
   cursor: pointer;
   position: relative;
 }
-table.dataTable thead th#ordenarNombreEquipo.sorting::after, table.dataTable thead th#ordenarAnioFundacion.sorting::after {
+table.dataTable thead th#ordenarNombreEquipo.sorting::after, table.dataTable thead th#ordenarAnioFundacion.sorting::after, table.dataTable thead th#ordenarDorsal.sorting::after, table.dataTable thead th#ordenarJugador.sorting::after, table.dataTable thead th#ordenarAltura.sorting::after, table.dataTable thead th#ordenarPeso.sorting::after {
   content: " ⇅";
   font-size: 0.9rem;
   margin-left: 6px;
 }
-table.dataTable thead th#ordenarNombreEquipo.sorting_asc::after, table.dataTable thead th#ordenarAnioFundacion.sorting_asc::after {
+table.dataTable thead th#ordenarNombreEquipo.sorting_asc::after, table.dataTable thead th#ordenarAnioFundacion.sorting_asc::after, table.dataTable thead th#ordenarDorsal.sorting_asc::after, table.dataTable thead th#ordenarJugador.sorting_asc::after, table.dataTable thead th#ordenarAltura.sorting_asc::after, table.dataTable thead th#ordenarPeso.sorting_asc::after {
   content: " ↑";
 }
-table.dataTable thead th#ordenarNombreEquipo.sorting_desc::after, table.dataTable thead th#ordenarAnioFundacion.sorting_desc::after {
+table.dataTable thead th#ordenarNombreEquipo.sorting_desc::after, table.dataTable thead th#ordenarAnioFundacion.sorting_desc::after, table.dataTable thead th#ordenarDorsal.sorting_desc::after, table.dataTable thead th#ordenarJugador.sorting_desc::after, table.dataTable thead th#ordenarAltura.sorting_desc::after, table.dataTable thead th#ordenarPeso.sorting_desc::after {
   content: " ↓";
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1) !important;
+}
+
+a.text-decoration-none:hover {
+  opacity: 0.9;
 }
 
 .accordion-button:not(.collapsed) {
@@ -11973,6 +11982,25 @@ table.dataTable thead th#ordenarNombreEquipo.sorting_desc::after, table.dataTabl
 .accordion-button:focus {
   box-shadow: none;
   border-color: #27a770;
+}
+
+.breadcrumb-custom-divider {
+  color: var(--secondary);
+}
+
+.bg-card-dark {
+  background-color: var(--background);
+  color: var(--primary);
+  border: 0;
+}
+
+.text-color-card {
+  color: var(--primary);
+}
+
+.bg-shield-dark {
+  background-color: white;
+  padding: 1vh 1vw;
 }
 
 /*# sourceMappingURL=style.css.map */

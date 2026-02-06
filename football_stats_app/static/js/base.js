@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btn) {
         function updateButton() {
             const isDark = document.body.classList.contains('dark-mode');
-            btn.innerHTML = isDark ? "☀️ Modo claro" : "🌙 Modo oscuro";
+            btn.innerHTML = isDark ? "☀️" : "🌙";
         }
 
         updateButton();

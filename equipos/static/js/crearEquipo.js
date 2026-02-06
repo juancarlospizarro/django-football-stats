@@ -29,344 +29,133 @@ function resetCampo(input) {
 }
 
 // VALIDACIÓN TIEMPO REAL CAMPO NOMBRE
-const nombreRegistro = document.getElementById("nombre");
+const nombreEquipo = document.getElementById("nombreEquipo");
 
-nombreRegistro.addEventListener("input", function () {
+nombreEquipo.addEventListener("input", function () {
 
-    if (nombreRegistro.value.trim().length === 0) {
-        resetCampo(nombreRegistro);
+    if (nombreEquipo.value.trim().length === 0) {
+        resetCampo(nombreEquipo);
         return;
     }
 
     validarCampo(
-        nombreRegistro,
-        function () { 
-            return nombreRegistro.value.trim().length >= 2 && /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/.test(nombreRegistro.value.trim()); 
+        nombreEquipo,
+        function () {
+            return nombreEquipo.value.trim().length >= 5 && /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/.test(nombreEquipo.value.trim());
         },
-        "El nombre debe tener al menos 2 caracteres. No puede contener números ni carácteres especiales."
+        "El nombre debe tener al menos 5 caracteres. No puede contener números ni carácteres especiales."
     );
 });
 
-// VALIDACIÓN TIEMPO REAL CAMPO APELLIDOS
-const apellidosRegistro = document.getElementById("apellidos");
+// VALIDACIÓN TIEMPO REAL CAMPO DIRECCIÓN
+const direccionEquipo = document.getElementById("direccionEquipo");
 
-apellidosRegistro.addEventListener("input", function () {
+direccionEquipo.addEventListener("input", function () {
 
-    if (apellidosRegistro.value.trim().length === 0) {
-        resetCampo(apellidosRegistro);
+    if (direccionEquipo.value.trim().length === 0) {
+        resetCampo(direccionEquipo);
         return;
     }
 
     validarCampo(
-        apellidosRegistro,
-        function () { 
-            return apellidosRegistro.value.trim().length >= 2 && /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/.test(apellidosRegistro.value.trim()); 
+        direccionEquipo,
+        function () {
+            return direccionEquipo.value.trim().length >= 10 && /^[A-Za-zÁÉÍÓÚáéíóúÑñ0-9\s.,ºª\/\-]+$/.test(direccionEquipo.value.trim());
         },
-        "Los apellidos deben tener al menos 2 caracteres. No puede contener números ni carácteres especiales."
-    );
-});
-
-// VALIDACIÓN TIEMPO REAL CAMPO EMAIL
-const emailRegistro = document.getElementById("emailInput");
-
-emailRegistro.addEventListener("input", function () {
-
-    if (emailRegistro.value.trim().length === 0) {
-        resetCampo(emailRegistro);
-        return;
-    }
-
-    validarCampo(
-        emailRegistro,
-        function () { 
-            return /^[a-zA-Z0-9._]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(emailRegistro.value); 
-        },
-        "Debe introducir un email válido. Se permite números, letras y caracteres especiales como '.', '_' y '-'."
+        "La dirección debe tener al menos 10 caracteres. Solo puede contener letras, números y '. , - / º ª'."
     );
 });
 
 // VALIDACIÓN TIEMPO REAL CAMPO TELÉFONO
-const telefonoRegistro = document.getElementById("telefono");
+const telefonoEquipo = document.getElementById("telefonoEquipo");
 
-telefonoRegistro.addEventListener("input", () => {
-    const valor = telefonoRegistro.value;
+telefonoEquipo.addEventListener("input", () => {
+    const valor = telefonoEquipo.value;
 
     if (valor === "") {
-        resetCampo(telefonoRegistro);
+        resetCampo(telefonoEquipo);
         return;
     }
 
     validarCampo(
-        telefonoRegistro,
-        () => /^\d{0,9}$/.test(telefonoRegistro.value),
+        telefonoEquipo,
+        () => /^\d{0,9}$/.test(telefonoEquipo.value),
         "Solo se permiten números y como máximo 9 dígitos."
     );
 });
 
-// VALIDACIÓN TIEMPO REAL CAMPO CONTRASEÑA
-const passwordRegistro = document.getElementById("passwordInput1");
-const reglasPassword = document.getElementById("reglasPassword");
-const reglaLongitud = document.getElementById("reglaLongitud");
-const reglaMayuscula = document.getElementById("reglaMayuscula");
-const reglaNumero = document.getElementById("reglaNumero");
-const reglaEspecial = document.getElementById("reglaEspecial");
+// VALIDACIÓN TIEMPO REAL CAMPO AÑO DE FUNDACIÓN
+const añoFundaciónEquipo = document.getElementById("anioFundacion");
 
-passwordRegistro.addEventListener("input", function () {
-    const valor = passwordRegistro.value;
-    const textoSubmit = document.getElementById("textoSubmit");
-
-    if (valor.length === 0) {
-        resetCampo(passwordRegistro);
-
-        reglasPassword.classList.add("d-none");
-        textoSubmit.classList.add("d-none");
-
-        [reglaLongitud, reglaMayuscula, reglaNumero, reglaEspecial].forEach(function (regla) {
-            regla.classList.remove("text-success");
-            regla.classList.add("text-danger");
-        });
-
-        return;
-    }
-
-    if (passwordRegistro.value.length > 20) {
-        passwordRegistro.value = passwordRegistro.value.slice(0, 20);
-    }
-
-    reglasPassword.classList.remove("d-none");
-
-    const okLongitud = valor.length >= 6;
-    const okMayuscula = /[A-Z]/.test(valor);
-    const okNumero = /[0-9]/.test(valor);
-    const okEspecial = /[!@#$%^&*()_+\-=[\]{};:'",.<>/?\\|]/.test(valor);
-
-    reglaLongitud.classList.toggle("text-success", okLongitud);
-    reglaLongitud.classList.toggle("text-danger", !okLongitud);
-
-    reglaMayuscula.classList.toggle("text-success", okMayuscula);
-    reglaMayuscula.classList.toggle("text-danger", !okMayuscula);
-
-    reglaNumero.classList.toggle("text-success", okNumero);
-    reglaNumero.classList.toggle("text-danger", !okNumero);
-
-    reglaEspecial.classList.toggle("text-success", okEspecial);
-    reglaEspecial.classList.toggle("text-danger", !okEspecial);
-
-    if (okLongitud && okMayuscula && okNumero && okEspecial) {
-        passwordRegistro.classList.add("is-valid");
-        passwordRegistro.classList.remove("is-invalid");
-        textoSubmit.classList.add("d-none");
-    } else {
-        passwordRegistro.classList.add("is-invalid");
-        passwordRegistro.classList.remove("is-valid");
-    }
-});
-
-// VALIDACIÓN TIEMPO REAL CAMPO REPETIR CONTRASEÑA
-const repetirContrasena = document.getElementById("passwordInput2");
-
-repetirContrasena.addEventListener("input", function () {
-    const valor = repetirContrasena.value;
-    const original = passwordRegistro.value;
-    const mensaje = repetirContrasena.nextElementSibling;
-
-    if (valor.length === 0) {
-        resetCampo(repetirContrasena);
-        return;
-    }
-
-    if (repetirContrasena.value.length > 20) {
-        repetirContrasena.value = repetirContrasena.value.slice(0, 20);
-    }
-
-    if (valor === original) {
-        repetirContrasena.classList.add("is-valid");
-        repetirContrasena.classList.remove("is-invalid");
-        mensaje.textContent = "";
-        mensaje.classList.add("d-none");
-    } else {
-        repetirContrasena.classList.add("is-invalid");
-        repetirContrasena.classList.remove("is-valid");
-        mensaje.textContent = "Las contraseñas no coinciden.";
-        mensaje.classList.remove("d-none");
-    }
-});
-
-// VALIDACIÓN TIEMPO REAL CAMPO FECHA DE NACIMIENTO
-const fechaNacimiento = document.getElementById("fechanacimiento");
-
-/* Función que valida si la fecha introducida como parámetro es válida */
-function esFechaValida(fecha) {
-    if (!fecha) return false;
-
-    let hoy = new Date();
-    let nacimiento = new Date(fecha);
-
-    let fechaMinima = new Date(1900, 0, 1);
-
-    if (nacimiento < fechaMinima) {
-        return false;
-    }
-
-    let edad = hoy.getFullYear() - nacimiento.getFullYear();
-    let mes = hoy.getMonth() - nacimiento.getMonth();
-
-    if (mes < 0 || (mes === 0 && hoy.getDate() < nacimiento.getDate())) {
-        edad--;
-    }
-
-    return edad >= 12;
-}
-
-/* Función que valida que el formato de la fecha sea correcto, es decir YYYY-MM-DD */
-function validarFormatoFecha(fecha) {
-
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(fecha)) {
-        return false;
-    }
-
-    // Comprobar que es una fecha que existe
-    const date = new Date(fecha);
-    if (isNaN(date.getTime())) {
-        return false;
-    }
-
-    return true;
-}
-
-fechaNacimiento.addEventListener("input", function () {
-
-    let valor = fechaNacimiento.value;
-
+añoFundaciónEquipo.addEventListener("input", function () {
+    let valor = añoFundaciónEquipo.value;
+    let mensaje = añoFundaciónEquipo.nextElementSibling;
     if (valor === "") {
-        resetCampo(fechaNacimiento);
+        resetCampo(añoFundaciónEquipo);
         return;
     }
 
-    if (fechaNacimiento.value.length > 10) {
-        fechaNacimiento.value = fechaNacimiento.value.slice(0, 10);
+    if (añoFundaciónEquipo.value.length > 4) {
+        añoFundaciónEquipo.value = añoFundaciónEquipo.value.slice(0, 4);
     }
-    
 
-    validarCampo(
-        fechaNacimiento,
-        function () {
-            return validarFormatoFecha(fechaNacimiento.value) && esFechaValida(fechaNacimiento.value);
-        },
-        "Debes tener al menos 12 años. La fecha no puede ser anterior a 01/01/1900. El formato correcto es YYYY-MM-DD."
-    );
-});
+    const soloNumeros = /^\d+$/.test(valor);
 
-// VALIDACIÓN TIEMPO REAL CAMPO TÉRMINOS Y CONDICIONES
-const terminosCheckbox = document.getElementById("terminos");
-const errorTerminos = document.getElementById("errorTerminos");
-const btnAceptarTerminos = document.getElementById("aceptarTerminos");
+    valor = Number(valor);
 
-/* Aceptación de los términos desde el modal */
-btnAceptarTerminos.addEventListener("click", function () {
-    terminosCheckbox.checked = true;
-    errorTerminos.textContent = "";
-    terminosCheckbox.classList.remove("is-invalid");
-    terminosCheckbox.classList.add("is-valid");
-    
-    const modal = bootstrap.Modal.getInstance(
-        document.getElementById("modalTerminos")
-    );
-    modal.hide();
-});
+    const anioActual = new Date().getFullYear();
 
-terminosCheckbox.addEventListener("change", function () {
-    if (terminosCheckbox.checked) {
-        errorTerminos.textContent = "";
-        terminosCheckbox.classList.remove("is-invalid");
-        terminosCheckbox.classList.add("is-valid");
+    if (soloNumeros && valor >= 1850 && valor <= anioActual) {
+        añoFundaciónEquipo.classList.add("is-valid");
+        añoFundaciónEquipo.classList.remove("is-invalid");
+        mensaje.textContent = "";
     } else {
-        errorTerminos.textContent = "Debes aceptar los términos y condiciones.";
-        terminosCheckbox.classList.add("is-invalid");
-        terminosCheckbox.classList.remove("is-valid");
+        añoFundaciónEquipo.classList.add("is-invalid");
+        añoFundaciónEquipo.classList.remove("is-valid");
+        mensaje.classList.add("text-danger", "text-success");
+        mensaje.textContent = "El año de fundación debe ser entre 1850 y " + anioActual + ", ambos inclusive.";
     }
 });
 
 // VALIDACIÓN COMPLETA DEL FORMULARIO AL ENVIARLO
-const registroForm = document.getElementById("formulario_registro");
+const crearEquipoForm = document.getElementById("crearEquipoForm");
 
-registroForm.setAttribute("novalidate", true);
+crearEquipoForm.setAttribute("novalidate", true);
 
-registroForm.addEventListener("submit", function (event) {
+crearEquipoForm.addEventListener("submit", function (event) {
 
     var validarNombre = validarCampo(
-        nombreRegistro,
-        function () { return nombreRegistro.value.trim().length >= 2 && /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/.test(nombreRegistro.value.trim()); },
+        nombreEquipo,
+        function () { return nombreEquipo.value.trim().length >= 2 && /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/.test(nombreEquipo.value.trim()); },
         "El nombre debe tener al menos 2 caracteres. No puede contener números ni carácteres especiales."
     );
 
-    var validarApellidos = validarCampo(
-        apellidosRegistro,
-        function () { return apellidosRegistro.value.trim().length >= 2 && /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/.test(apellidosRegistro.value.trim()); },
-        "Los apellidos deben tener al menos 2 caracteres. No puede contener números ni carácteres especiales."
-    );
-
-    var validarEmail = validarCampo(
-        emailRegistro,
-        function () {
-            return /^[a-zA-Z0-9._]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(emailRegistro.value);
-        },
-        "Debe introducir un email válido. Se permite números, letras y caracteres especiales como '.', '_' y '-'."
+    var validarDireccion = validarCampo(
+        direccionEquipo,
+        function () { return direccionEquipo.value.trim().length >= 10 && /^[A-Za-zÁÉÍÓÚáéíóúÑñ0-9\s.,ºª\/\-]+$/.test(direccionEquipo.value.trim()); },
+        "La dirección debe tener al menos 10 caracteres. Solo puede contener letras, números y '. , - / º ª'."
     );
 
     const validarTelefono = validarCampo(
-        telefonoRegistro,
-        () => /^\d{9}$/.test(telefonoRegistro.value),
+        telefonoEquipo,
+        () => /^\d{9}$/.test(telefonoEquipo.value),
         "El teléfono debe tener exactamente 9 números."
     );
 
-    var validarPassword = validarCampo(
-        passwordRegistro,
+    var validarAño = validarCampo(
+        añoFundaciónEquipo,
         function () {
-            var valor = passwordRegistro.value;
-            return valor.length >= 6 &&
-                /[A-Z]/.test(valor) &&
-                /[0-9]/.test(valor) &&
-                /[!@#$%^&*()_+\-=[\]{};:'",.<>/?\\|]/.test(valor);
+            return añoFundaciónEquipo.value.trim() !== "" && Number(añoFundaciónEquipo.value.trim()) >= 1850 && Number(añoFundaciónEquipo.value.trim()) <= new Date().getFullYear();
         },
-        "La contraseña no cumple los requisitos."
+        "Año inválido. Debe ser uno entre 1850 y " + new Date().getFullYear() + ", ambos inclusive."
     );
-
-    var validarRepetirPassword = 
-        repetirContrasena.value.length > 0 &&
-        repetirContrasena.value === passwordRegistro.value;
-
-    if (!validarRepetirPassword) {
-        const mensaje = repetirContrasena.nextElementSibling;
-        repetirContrasena.classList.add("is-invalid");
-        mensaje.textContent = "Las contraseñas no coinciden.";
-        mensaje.classList.remove("d-none");
-    }
-
-    var validarFecha = validarCampo(
-        fechaNacimiento,
-        function () {
-            return validarFormatoFecha(fechaNacimiento.value) && esFechaValida(fechaNacimiento.value);
-        },
-        "Debes tener al menos 12 años. La fecha no puede ser anterior a 01/01/1900. El formato correcto es YYYY-MM-DD."
-    );
-
-    const validarTerminos = terminosCheckbox.checked;
-
-    if (!validarTerminos) {
-        errorTerminos.textContent = "Debes aceptar los términos y condiciones.";
-    }
 
     if (!(
         validarNombre &&
-        validarApellidos &&
-        validarEmail &&
+        validarDireccion &&
         validarTelefono &&
-        validarPassword &&
-        validarRepetirPassword &&
-        validarFecha &&
-        validarTerminos
-    ) ){
+        validarAño
+    )) {
         event.preventDefault();
     }
 });

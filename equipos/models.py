@@ -2,6 +2,7 @@ from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator, RegexValidator
 from django.utils import timezone
 from django.utils.text import slugify
+from usuarios.models import PerfilJugador, PerfilEntrenador
 
 class Equipo(models.Model):
     """
@@ -92,3 +93,80 @@ class Equipo(models.Model):
 
     def __str__(self):
         return self.nombre
+
+
+class EquipoJugador(models.Model):
+    """
+    Modelo de relación N:N entre Equipo y PerfilJugador.
+    Permite que un jugador pertenezca a múltiples equipos y 
+    que un equipo tenga múltiples jugadores.
+    """
+    equipo = models.ForeignKey(
+        Equipo, 
+        on_delete=models.CASCADE, 
+        related_name='jugadores'
+    )
+    
+    perfil_jugador = models.ForeignKey(
+        PerfilJugador, 
+        on_delete=models.CASCADE, 
+        related_name='equipos'
+    )
+    
+    fecha_incorporacion = models.DateField(
+        auto_now_add=True,
+        verbose_name="Fecha de incorporación"
+    )
+    
+    es_activo = models.BooleanField(
+        default=True,
+        verbose_name="¿Está activo en el equipo?"
+    )
+
+    class Meta:
+        verbose_name = "Equipo - Jugador"
+        verbose_name_plural = "Equipos - Jugadores"
+        unique_together = ('equipo', 'perfil_jugador')
+        ordering = ['equipo', 'perfil_jugador']
+
+    def __str__(self):
+        return f"{self.perfil_jugador.usuario.get_full_name()} en {self.equipo.nombre}"
+
+
+class EquipoEntrenador(models.Model):
+    """
+    Modelo de relación N:N entre Equipo y PerfilEntrenador.
+    Permite que un entrenador dirija múltiples equipos y 
+    que un equipo tenga múltiples entrenadores (técnico, asistente, etc.).
+    """
+    equipo = models.ForeignKey(
+        Equipo, 
+        on_delete=models.CASCADE, 
+        related_name='entrenadores'
+    )
+    
+    perfil_entrenador = models.ForeignKey(
+        PerfilEntrenador, 
+        on_delete=models.CASCADE, 
+        related_name='equipos'
+    )
+    
+    fecha_incorporacion = models.DateField(
+        auto_now_add=True,
+        verbose_name="Fecha de incorporación"
+    )
+    
+    es_activo = models.BooleanField(
+        default=True,
+        verbose_name="¿Está activo en el equipo?"
+    )
+
+    class Meta:
+        verbose_name = "Equipo - Entrenador"
+        verbose_name_plural = "Equipos - Entrenadores"
+        unique_together = ('equipo', 'perfil_entrenador')
+        ordering = ['equipo', 'perfil_entrenador']
+
+    def __str__(self):
+        return f"{self.perfil_entrenador.usuario.get_full_name()} en {self.equipo.nombre}"
+

@@ -10,7 +10,9 @@
         <p class="fs-5 text-secondary">
             Actualmente no perteneces a ningún equipo.
         </p>
-        <p>Puedes <a href="#crearEquipo" class="d-inline nav-link text-secondary text-decoration-underline">crear un equipo</a> y convertirte en su entrenador/a de forma sencilla.</p>
+        <p class="fs-5 text-secondary">Puedes <a href="#crearEquipo"
+                class="d-inline nav-link text-decoration-underline">crear un equipo</a> y convertirte en su entrenador/a
+            de forma sencilla.</p>
     </section>
 
     <!-- Contenido -->
@@ -40,7 +42,8 @@
                             <tr>
                                 <th class="bg-success text-white text-center">Escudo</th>
                                 <th id="ordenarNombreEquipo" class="bg-success text-white text-center">Nombre</th>
-                                <th id="ordenarAnioFundacion" class="bg-success text-white text-center">Año de fundación</th>
+                                <th id="ordenarAnioFundacion" class="bg-success text-white text-center">Año de fundación
+                                </th>
                                 <th class="bg-success"></th>
                             </tr>
                         </thead>
@@ -61,10 +64,6 @@
                                             class="bi bi-eye-fill"></i>
                                         Ver equipo</a></td>
                             </tr>
-                            {% empty %}
-                            <tr>
-                                <td colspan="4">No hay equipos registrados.</td>
-                            </tr>
                             {% endfor %}
                         </tbody>
                     </table>
@@ -82,19 +81,23 @@
                             </p>
                         </div>
 
-                        <form method="POST" enctype="multipart/form-data" action="{% url 'equipos:crear_equipo' %}">
+                        <form id="crearEquipoForm" method="POST" enctype="multipart/form-data" action="{% url 'equipos:crear_equipo' %}">
                             {% csrf_token %}
 
-                                        <div class="row g-3 mb-3">
-                            <div class="col-md-6 mb-4">
-                                <label for="nombreEquipo" class="form-label fw-medium">Nombre del equipo</label>
-                                <input type="text" class="form-control form-control-lg rounded-3" id="nombreEquipo"
-                                    name="nombre" required>
-                            </div>
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-6 mb-4">
+                                    <label for="nombreEquipo" class="form-label fw-medium">Nombre del equipo</label>
+                                    <input type="text" class="form-control form-control-lg rounded-3" id="nombreEquipo"
+                                        name="nombre" required>
+                                        <small id="errorNombre" class="help-text text-danger"
+                                            aria-live="polite"></small>
+                                </div>
                                 <div class="col-md-6">
                                     <label for="anioFundacion" class="form-label fw-medium">Año de fundación</label>
                                     <input type="number" class="form-control form-control-lg rounded-3"
                                         id="anioFundacion" name="anio_fundacion" required>
+                                        <small id="errorAnioFundacion" class="help-text text-danger"
+                                            aria-live="polite"></small>
                                 </div>
                             </div>
 
@@ -103,28 +106,34 @@
                                     <label for="direccionEquipo" class="form-label fw-medium">Dirección</label>
                                     <input type="text" class="form-control form-control-lg rounded-3"
                                         id="direccionEquipo" name="direccion">
+                                        <small id="errorDireccion" class="help-text text-danger"
+                                            aria-live="polite"></small>
                                 </div>
                                 <div class="col-md-6">
                                     <label for="telefonoEquipo" class="form-label fw-medium">Teléfono</label>
                                     <input type="tel" class="form-control form-control-lg rounded-3" id="telefonoEquipo"
-                                        name="telefono">
+                                        name="telefono" placeholder="Número de 9 dígitos">
+                                        <small id="errorTelefono" class="help-text text-danger"
+                                            aria-live="polite"></small>
                                 </div>
                             </div>
 
                             <div class="row g-3 mb-4">
-                            <div class="col-md-6">
+                                <div class="col-md-6">
                                     <label for="escudoEquipo" class="form-label fw-medium">Escudo</label>
                                     <input type="file" class="form-control form-control-lg rounded-3" id="escudoEquipo"
                                         name="escudo" accept="image/*">
+                                    <div class="form-text">Si no quieres añadir un escudo se utilizará por defecto el
+                                        que se puede ver en el formulario.</div>
                                 </div>
-                                    <!-- Vista previa -->
-                                    <div class="col-md-6 mt-3 text-center">
-                                        <img id="previewFoto"
-                                            src="{% if equipo.escudo %}{{ equipo.escudo.url }}{% else %}{% static 'img/default_shield.png' %}{% endif %}"
-                                            data-original="{% if equipo.escudo %}{{ equipo.escudo.url }}{% else %}{% static 'img/default_shield.png' %}{% endif %}"
-                                            alt="Vista previa" class="rounded-4 shadow-sm"
-                                            style="width: 200px; height: 200px; object-fit: cover;">
-                                    </div>
+                                <!-- Vista previa -->
+                                <div class="col-md-6 mt-3 text-center">
+                                    <img id="previewFoto"
+                                        src="{% if equipo.escudo %}{{ equipo.escudo.url }}{% else %}{% static 'img/default_shield.png' %}{% endif %}"
+                                        data-original="{% if equipo.escudo %}{{ equipo.escudo.url }}{% else %}{% static 'img/default_shield.png' %}{% endif %}"
+                                        alt="Vista previa" class="rounded-4 shadow-sm"
+                                        style="width: 200px; height: 200px; object-fit: cover;">
+                                </div>
                             </div>
                             <div class="row g-3 mb-4">
                                 <div class="col-6">
@@ -132,6 +141,8 @@
                                     <div class="d-flex align-items-center gap-2">
                                         <input type="color" class="form-control form-control-color w-100 rounded-3"
                                             id="colorPrincipal" name="color_principal" title="Elige el color principal">
+                                            <small id="errorColorPrincipal" class="help-text text-danger"
+                                            aria-live="polite"></small>
                                     </div>
                                 </div>
                                 <div class="col-6">
@@ -140,8 +151,11 @@
                                         <input type="color" class="form-control form-control-color w-100 rounded-3"
                                             id="colorSecundario" name="color_secundario"
                                             title="Elige el color secundario" value="#FFFFFF">
+                                            <small id="errorColorSecundario" class="help-text text-danger"
+                                            aria-live="polite"></small>
                                     </div>
                                 </div>
+                                <small class="text-secondary">En caso de no modificar los colores, se tomarán los seleccionados por defecto.</small>
                             </div>
 
                             <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">

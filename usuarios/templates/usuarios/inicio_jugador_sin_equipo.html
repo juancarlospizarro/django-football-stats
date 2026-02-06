@@ -10,6 +10,7 @@
     <p class="fs-5 text-secondary">
       Actualmente no perteneces a ningún equipo.
     </p>
+    <p class="fs-5 text-secondary">Para poder pertenecer a un equipo registrado necesitas que un entrenador te añada a su equipo.</p>
   </section>
 
   <!-- Contenido -->
@@ -63,10 +64,6 @@
                 <td><a class="nav-link text-decoration-none text-secondary"
                     href="{% url 'equipos:informacion_equipo' equipo.slug %}"><i class="bi bi-eye-fill"></i>
                     Ver equipo</a></td>
-              </tr>
-              {% empty %}
-              <tr>
-                <td colspan="3">No hay equipos registrados.</td>
               </tr>
               {% endfor %}
             </tbody>

@@ -21,6 +21,7 @@ class Usuario(AbstractUser):
     fecha_nacimiento = models.DateField(_('fecha de nacimiento'), blank=True, null=True)
     foto = models.ImageField(upload_to='fotos_perfil/', blank=True, null=True)
     tiene_equipo = models.BooleanField(default=False)
+    slug = models.SlugField(max_length=255, unique=True, null=True, blank=True)
     rol = models.CharField(
         max_length=20, 
         choices=Rol.choices, 

@@ -11,6 +11,7 @@ urlpatterns = [
      path('signin/', views.signin, name="signin"),
      path('logout/', views.logout_view, name='logout'),
      path('miperfil/', views.miperfil, name='miperfil'),
+     path('perfil/<slug:slug>/', views.ver_perfil_usuario, name='ver_perfil_usuario'),
      path('miperfil/eliminarcuenta/', views.eliminar_cuenta, name="eliminar_cuenta"),
 
      # Enviar email

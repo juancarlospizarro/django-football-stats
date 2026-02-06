@@ -49,11 +49,11 @@ emailRegistro.addEventListener("input", function () {
 
 
 // VALIDACIÓN COMPLETA DEL FORMULARIO AL ENVIARLO
-const registroForm = document.getElementById("emailCambioContraseña");
+const validarForm = document.getElementById("emailCambioContraseña");
 
-registroForm.setAttribute("novalidate", true);
+validarForm.setAttribute("novalidate", true);
 
-registroForm.addEventListener("submit", function (event) {
+validarForm.addEventListener("submit", function (event) {
 
     var validarEmail = validarCampo(
         emailRegistro,

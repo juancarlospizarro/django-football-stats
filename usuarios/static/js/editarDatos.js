@@ -169,11 +169,11 @@ fechaNacimiento.addEventListener("input", function () {
 });
 
 // VALIDACIÓN COMPLETA DEL FORMULARIO AL ENVIARLO
-const registroForm = document.getElementById("formulario_editar_datos");
+const editarDatosForm = document.getElementById("formulario_editar_datos");
 
-registroForm.setAttribute("novalidate", true);
+editarDatosForm.setAttribute("novalidate", true);
 
-registroForm.addEventListener("submit", function (event) {
+editarDatosForm.addEventListener("submit", function (event) {
 
     var validarNombre = validarCampo(
         nombreRegistro,

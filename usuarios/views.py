@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from django.urls import reverse_lazy
 from django.contrib.auth.views import PasswordResetView
 from django.contrib.messages.views import SuccessMessageMixin
@@ -81,7 +81,7 @@ def signin(request):
             login(request, user)
             messages.success(request, "Te has registrado correctamente")
             # Redirigir a la página de inicio
-            return render(request, "usuarios/signin.html")
+            return redirect('landing')
 
         except Exception as e:
             # Si pasa algo raro, mostramos el error
@@ -94,12 +94,11 @@ def logout_view(request):
 
 @login_required
 def miperfil(request):
-
+    """Ver y editar mi propio perfil"""
     user = request.user
 
     try:
         if request.method == "POST":
-
             user.first_name = request.POST.get("first_name")
             user.last_name = request.POST.get("last_name")
             user.telefono = request.POST.get("telefono")
@@ -110,13 +109,37 @@ def miperfil(request):
 
             user.save()
             messages.success(request, "Perfil actualizado correctamente")
-
             return redirect("usuarios:miperfil")
 
-        return render(request, "usuarios/miperfil.html")
+        context = {
+            'usuario_perfil': user,
+            'es_mi_perfil': True,
+        }
+        return render(request, "usuarios/miperfil.html", context)
     except Exception as e:
-            # Si pasa algo raro, mostramos el error
-            return render(request, 'usuarios/miperfil.html', {'error': f"Error al actualizar: {str(e)}"})
+        return render(request, 'usuarios/miperfil.html', {'error': f"Error al actualizar: {str(e)}"})
+
+@login_required
+def ver_perfil_usuario(request, slug):
+    """Ver el perfil de otro usuario usando slug"""
+    usuario = get_object_or_404(Usuario, slug=slug)
+    
+    # Obtener información adicional según el rol
+    perfil_jugador = None
+    perfil_entrenador = None
+    
+    if usuario.rol == 'jugador':
+        perfil_jugador = usuario.perfil_jugador
+    elif usuario.rol == 'entrenador':
+        perfil_entrenador = usuario.perfil_entrenador
+    
+    context = {
+        'usuario_perfil': usuario,
+        'perfil_jugador': perfil_jugador,
+        'perfil_entrenador': perfil_entrenador,
+        'es_mi_perfil': usuario == request.user,
+    }
+    return render(request, 'usuarios/miperfil.html', context)
     
 @login_required
 def eliminar_cuenta(request):

@@ -1,7 +1,13 @@
 {% extends "includes/base.html" %}
 {% load static %}
 
-{% block title %}FutDataManager - Mi perfil{% endblock %}
+{% block title %}
+{% if usuario_perfil.get_full_name == user.get_full_name %}
+FutDataManager - Mi perfil
+{% else %}  
+FutDataManager - {{ usuario_perfil.get_full_name }}
+{% endif %}
+{% endblock %}
 
 {% block content %}
 <div class="container my-5">
@@ -12,96 +18,154 @@
         <div class="col-md-8 order-2 order-md-1">
 
             <!-- Encabezado con Nombre -->
+            <!-- Encabezado con Nombre -->
             <div class="mb-4">
-                <!-- Usamos text-primary que es tu verde corporativo -->
-                <h2 class="h3 text-foot-green fw-bold mb-2">
-                    {{ user.first_name }} {{ user.last_name }}
+                <!-- Título principal -->
+                <h2 class="h3 fw-bold mb-3" style="color: #27a770;">
+                    Información general
                 </h2>
-                <div class="card shadow-sm border-0 mb-4">
-                    <div class="card-body">
+                
+                <!-- Tarjeta de Información Mejorada -->
+                <div class="card shadow-sm mb-4 rounded-4 overflow-hidden bg-card-dark">
+                    <div class="card-body p-4">
 
-                        <ul class="list-unstyled mb-0">
-                            <li class="mb-2">
-                                <strong>Nombre:</strong>
-                                {{ user.first_name }} {{ user.last_name }}
-                            </li>
+                        <div class="row g-4">
+                            <!-- Dato 1: Nombre -->
+                            <div class="col-md-6">
+                                <div class="d-flex align-items-center">
+                                    <div class="icon-square bg-light rounded-3 p-3 me-3 d-flex align-items-center justify-content-center">
+                                        <i class="bi bi-person-fill fs-4" style="color: #27a770;"></i>
+                                    </div>
+                                    <div>
+                                        <small class="text-secondary d-block text-uppercase fw-bold" style="font-size: 0.7rem; letter-spacing: 0.5px;">Nombre Completo</small>
+                                        <span class="fw-bold text-color-card">{{ usuario_perfil.first_name }} {{ usuario_perfil.last_name }}</span>
+                                    </div>
+                                </div>
+                            </div>
 
-                            <li class="mb-2">
-                                <strong>Email:</strong>
-                                {{ user.email }}
-                            </li>
+                            <!-- Dato 2: Email -->
+                            <div class="col-md-6">
+                                <div class="d-flex align-items-center">
+                                    <div class="icon-square bg-light rounded-3 p-3 me-3 d-flex align-items-center justify-content-center">
+                                        <i class="bi bi-envelope-fill fs-4" style="color: #27a770;"></i>
+                                    </div>
+                                    <div>
+                                        <small class="text-secondary d-block text-uppercase fw-bold" style="font-size: 0.7rem; letter-spacing: 0.5px;">Email</small>
+                                        <span class="fw-bold text-color-card text-break">{{ usuario_perfil.email }}</span>
+                                    </div>
+                                </div>
+                            </div>
 
-                            <li class="mb-2">
-                                <strong>Teléfono:</strong>
-                                {{ user.telefono }}
-                            </li>
+                            <!-- Dato 3: Teléfono -->
+                            <div class="col-md-6">
+                                <div class="d-flex align-items-center">
+                                    <div class="icon-square bg-light rounded-3 p-3 me-3 d-flex align-items-center justify-content-center">
+                                        <i class="bi bi-telephone-fill fs-4" style="color: #27a770;"></i>
+                                    </div>
+                                    <div>
+                                        <small class="text-secondary d-block text-uppercase fw-bold" style="font-size: 0.7rem; letter-spacing: 0.5px;">Teléfono</small>
+                                        <span class="fw-bold text-color-card">{{ usuario_perfil.telefono|default:"No especificado" }}</span>
+                                    </div>
+                                </div>
+                            </div>
 
-                            <li class="mb-2">
-                                <strong>Fecha de nacimiento:</strong>
-                                {{ user.fecha_nacimiento|date:"d/m/Y" }}
-                            </li>
+                            <!-- Dato 4: Fecha Nacimiento -->
+                            <div class="col-md-6">
+                                <div class="d-flex align-items-center">
+                                    <div class="icon-square bg-light rounded-3 p-3 me-3 d-flex align-items-center justify-content-center">
+                                        <i class="bi bi-calendar-date-fill fs-4" style="color: #27a770;"></i>
+                                    </div>
+                                    <div>
+                                        <small class="text-secondary d-block text-uppercase fw-bold" style="font-size: 0.7rem; letter-spacing: 0.5px;">Fecha de Nacimiento</small>
+                                        <span class="fw-bold text-color-card">{{ usuario_perfil.fecha_nacimiento|date:"d/m/Y"|default:"No especificada" }}</span>
+                                    </div>
+                                </div>
+                            </div>
 
-                            <li class="mb-2">
-                                <strong>Rol:</strong>
-                                {{ user.rol|capfirst }}
-                            </li>
+                            <!-- Dato 5: Rol -->
+                            <div class="col-md-6">
+                                <div class="d-flex align-items-center">
+                                    <div class="icon-square bg-light rounded-3 p-3 me-3 d-flex align-items-center justify-content-center">
+                                        <i class="bi bi-person-badge-fill fs-4" style="color: #27a770;"></i>
+                                    </div>
+                                    <div>
+                                        <small class="text-secondary d-block text-uppercase fw-bold" style="font-size: 0.7rem; letter-spacing: 0.5px;">Rol</small>
+                                        <span class="fw-bold text-color-card">{{ usuario_perfil.get_rol_display }}</span>
+                                    </div>
+                                </div>
+                            </div>
 
-                            <li class="mb-2">
-                                <strong>Fecha de registro:</strong>
-                                {{ user.date_joined|date:"d/m/Y" }}
-                            </li>
+                            <!-- Dato 6: Fecha Registro -->
+                            <div class="col-md-6">
+                                <div class="d-flex align-items-center">
+                                    <div class="icon-square bg-light rounded-3 p-3 me-3 d-flex align-items-center justify-content-center">
+                                        <i class="bi bi-clock-history fs-4" style="color: #27a770;"></i>
+                                    </div>
+                                    <div>
+                                        <small class="text-secondary d-block text-uppercase fw-bold" style="font-size: 0.7rem; letter-spacing: 0.5px;">Miembro desde</small>
+                                        <span class="fw-bold text-color-card">{{ usuario_perfil.date_joined|date:"d/m/Y" }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-                            {% if user.last_login %}
-                            <li class="mb-2">
-                                <strong>Último acceso:</strong>
-                                {{ user.last_login|date:"d/m/Y H:i" }}
-                            </li>
+                        <!-- Sección Específica Jugador (Si aplica) -->
+                        {% if usuario_perfil.tiene_equipo and usuario_perfil.rol == "jugador" %}
+                        <hr class="my-4 text-muted">
+                        <h4 class="h6 fw-bold mb-4 text-uppercase text-secondary" style="letter-spacing: 0.5px;">
+                            Datos Deportivos
+                        </h4>
+                        
+                        <div class="row g-4">
+                            <!-- Altura -->
+                            <div class="col-6 col-md-3">
+                                <div class="text-center p-3 bg-light rounded-3">
+                                    <small class="d-block text-secondary mb-1">Altura</small>
+                                    <span class="fw-bold h5 text-dark mb-0">{{ usuario_perfil.perfil_jugador.altura|default:"--" }} <small class="fs-6 text-muted">cm</small></span>
+                                </div>
+                            </div>
+                            
+                            <!-- Peso -->
+                            <div class="col-6 col-md-3">
+                                <div class="text-center p-3 bg-light rounded-3">
+                                    <small class="d-block text-secondary mb-1">Peso</small>
+                                    <span class="fw-bold h5 text-dark mb-0">{{ usuario_perfil.perfil_jugador.peso|default:"--" }} <small class="fs-6 text-muted">kg</small></span>
+                                </div>
+                            </div>
+
+                            <!-- Dorsal -->
+                            <div class="col-6 col-md-3">
+                                <div class="text-center p-3 bg-light rounded-3">
+                                    <small class="d-block text-secondary mb-1">Dorsal</small>
+                                    <span class="fw-bold h5 text-dark mb-0">#{{ usuario_perfil.perfil_jugador.dorsal|default:"--" }}</span>
+                                </div>
+                            </div>
+
+                            <!-- Pierna -->
+                            <div class="col-6 col-md-3">
+                                <div class="text-center p-3 bg-light rounded-3">
+                                    <small class="d-block text-secondary mb-1">Pierna</small>
+                                    <span class="fw-bold h5 text-dark mb-0">{{ usuario_perfil.perfil_jugador.get_pierna_habil_display|default:"--" }}</span>
+                                </div>
+                            </div>
+                            
+                            <!-- Capitán Badge -->
+                            {% if usuario_perfil.perfil_jugador.es_capitan %}
+                            <div class="col-12">
+                                <div class="alert alert-warning d-flex align-items-center border-0 shadow-sm mb-0" role="alert">
+                                    <i class="bi bi-star-fill me-2"></i>
+                                    <div>Este jugador es <strong>Capitán</strong> del equipo.</div>
+                                </div>
+                            </div>
                             {% endif %}
-
-                            {% if user.tiene_equipo and user.rol == "jugador" %}
-                            <h4 class="h5 text-foot-green fw-bold mb-3">
-                                Información del jugador en su equipo
-                            </h4>
-
-                            <li class="mb-2">
-                                <strong>Altura:</strong>
-                                {{ user.perfil_jugador.altura }} cm
-                            </li>
-
-                            <li class="mb-2">
-                                <strong>Peso:</strong>
-                                {{ user.perfil_jugador.peso }} kg
-                            </li>
-
-                            <li class="mb-2">
-                                <strong>Dorsal:</strong>
-                                {{ user.perfil_jugador.dorsal }}
-                            </li>
-
-                            <li class="mb-2">
-                                <strong>Pierna hábil:</strong>
-                                {{ user.perfil_jugador.pierna_habil|capfirst }}
-                            </li>
-
-                            <li class="mb-2">
-                                <strong>Es capitán:</strong>
-                                {% if user.perfil_jugador.es_capitan %}
-                                Sí
-                                {% else %}
-                                No
-                                {% endif %}
-                            </li>
-
-
-
-                            {% endif %}
-                        </ul>
+                        </div>
+                        {% endif %}
 
                     </div>
                 </div>
-
             </div>
 
+            {% if usuario_perfil == user %}
             <!-- Botón Actualizar Información -->
             <div class="mb-5">
                 <a href="#" class="btn btn-foot-form-enviar px-4 py-2" data-bs-toggle="modal"
@@ -109,7 +173,7 @@
                     <i class="bi bi-person-lines-fill"></i> Editar información personal
                 </a>
             </div>
-
+            {% endif %}
 
             <!-- === MODAL DE ACTUALIZACIÓN === -->
             <div class="modal fade" id="updateProfileModal" tabindex="-1" aria-labelledby="updateModalLabel"
@@ -130,7 +194,7 @@
                                     <div class="col-md-6">
                                         <label for="nombre" class="form-label fw-medium">Nombre</label>
                                         <input type="text" class="form-control rounded-3" id="nombre" name="first_name"
-                                            value="{{ user.first_name }}">
+                                            value="{{ usuario_perfil.first_name }}">
                                         <small id="errorNombre" class="help-text text-danger"
                                             aria-live="polite"></small>
                                     </div>
@@ -139,7 +203,7 @@
                                     <div class="col-md-6">
                                         <label for="apellidos" class="form-label fw-medium">Apellidos</label>
                                         <input type="text" class="form-control rounded-3" id="apellidos"
-                                            name="last_name" value="{{ user.last_name }}">
+                                            name="last_name" value="{{ usuario_perfil.last_name }}">
                                         <small id="errorApellidos" class="help-text text-danger"
                                             aria-live="polite"></small>
                                     </div>
@@ -148,7 +212,7 @@
                                     <div class="col-12">
                                         <label for="email" class="form-label fw-medium">Email</label>
                                         <input type="email" class="form-control rounded-3" id="email" name="email"
-                                            value="{{ user.email }}" disabled>
+                                            value="{{ usuario_perfil.email }}" disabled>
                                         <small id="errorEmail" class="help-text text-danger" aria-live="polite"></small>
                                     </div>
 
@@ -156,7 +220,7 @@
                                     <div class="col-md-6">
                                         <label for="telefono" class="form-label fw-medium">Teléfono</label>
                                         <input type="tel" class="form-control rounded-3" id="telefono" name="telefono"
-                                            value="{{ user.telefono|default:'' }}">
+                                            value="{{ usuario_perfil.telefono|default:'' }}">
                                         <small id="errorTelefono" class="help-text text-danger"
                                             aria-live="polite"></small>
                                     </div>
@@ -167,7 +231,7 @@
                                             nacimiento</label>
                                         <!-- Importante: |date:'Y-m-d' es necesario para que el input type="date" reconozca el valor -->
                                         <input type="date" class="form-control rounded-3" id="fechanacimiento"
-                                            name="fecha_nacimiento" value="{{ user.fecha_nacimiento|date:'Y-m-d' }}">
+                                            name="fecha_nacimiento" value="{{ usuario_perfil.fecha_nacimiento|date:'Y-m-d' }}">
                                         <small id="errorFechaNacimiento" class="help-text text-danger"
                                             aria-live="polite"></small>
                                     </div>
@@ -184,8 +248,8 @@
                                     <!-- Vista previa -->
                                     <div class="col-md-6 mt-3 text-center">
                                         <img id="previewFoto"
-                                            src="{% if user.foto %}{{ user.foto.url }}{% else %}{% static 'img/default_avatar.jpg' %}{% endif %}"
-                                            data-original="{% if user.foto %}{{ user.foto.url }}{% else %}{% static 'img/default_avatar.jpg' %}{% endif %}"
+                                            src="{% if usuario_perfil.foto %}{{ usuario_perfil.foto.url }}{% else %}{% static 'img/default_avatar.jpg' %}{% endif %}"
+                                            data-original="{% if usuario_perfil.foto %}{{ usuario_perfil.foto.url }}{% else %}{% static 'img/default_avatar.jpg' %}{% endif %}"
                                             alt="Vista previa" class="rounded-4 shadow-sm"
                                             style="width: 200px; height: 200px; object-fit: cover;">
                                     </div>
@@ -254,7 +318,7 @@
             </div>
             {% endif %}
 
-            {% if user.rol == "jugador" %}
+            {% if usuario_perfil.rol == "jugador" %}
             <!-- Sección Lesiones -->
             <div class="mb-5">
                 <h3 class="h4 text-foot-green fw-bold mb-2">Lesiones</h3>
@@ -267,13 +331,13 @@
                 <p class="fs-5 text-secondary">Información sanciones del jugador</p>
             </div>
 
-            {% elif user.rol == "entrenador" %}
+            {% elif usuario_perfil.rol == "entrenador" %}
             <!-- Sección Equipos -->
             <div class="mb-5">
                 <h3 class="h4 text-foot-green fw-bold mb-2">Equipos a los que ha entrenado</h3>
                 <p class="fs-5 text-secondary">Información equipos que el entrenador ha entrenado</p>
             </div>
-            {% if user.tiene_equipo %}
+            {% if usuario_perfil.tiene_equipo %}
             <!-- Sección Estadisticas Equipo Actual -->
             <div class="mb-5">
                 <h3 class="h4 text-foot-green fw-bold mb-2">Estadísticas del equipo actual</h3>
@@ -282,18 +346,19 @@
             {% endif %}
 
             {% endif %}
+            {% if usuario_perfil == user %}
             <!-- Botones de Acción (Zona de Peligro) -->
             <div class="d-flex flex-wrap gap-3 mt-5 pt-3">
                 <!-- Botón Cerrar Sesión (Gris Oscuro) -->
                 <a href="{% url 'usuarios:logout' %}" class="btn text-white px-4 py-2 rounded-3 border-0"
                     style="background-color: #504847;">
-                    Cerrar sesión
+                    <i class="bi bi-box-arrow-in-left"></i> Cerrar sesión
                 </a>
 
                 <!-- Botón Eliminar Cuenta (Gris Oscuro) -->
                 <button type="button" class="btn text-white px-4 py-2 rounded-3 border-0"
                     style="background-color: #504847;" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">
-                    Eliminar cuenta
+                    <i class="bi bi-person-fill-x"></i> Eliminar cuenta
                 </button>
 
                 <div class="modal fade" id="confirmDeleteModal" tabindex="-1">
@@ -301,7 +366,7 @@
                         <div class="modal-content rounded-4">
 
                             <div class="modal-header">
-                                <h5 class="modal-title text-danger">Eliminar cuenta</h5>
+                                <h5 class="modal-title text-danger"><i class="bi bi-person-fill-x"></i> Eliminar cuenta</h5>
                             </div>
 
                             <div class="modal-body">
@@ -337,16 +402,16 @@
                     </div>
                 </div>
             </div>
-
+            {% endif %}
         </div>
 
         <!-- COLUMNA DERECHA: Foto de Perfil (Orden 1 en móvil, 2 en escritorio) -->
         <div class="col-md-4 order-1 order-md-2 d-flex justify-content-center justify-content-md-end align-items-start">
 
             <!-- Lógica para mostrar la foto -->
-            {% if user.foto %}
+            {% if usuario_perfil.foto %}
             <!-- Si tiene foto subida -->
-            <img src="{{ user.foto.url }}" alt="Foto de perfil" class="rounded-4 shadow-sm"
+            <img src="{{ usuario_perfil.foto.url }}" alt="Foto de perfil" class="rounded-4 shadow-sm"
                 style="width: 350px; height: 350px; object-fit: cover;">
             {% else %}
             <!-- Placeholder si no tiene foto (Imagen genérica o iniciales) -->

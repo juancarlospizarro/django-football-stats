@@ -118,11 +118,11 @@ repetirContrasena.addEventListener("input", function () {
 });
 
 // VALIDACIÓN COMPLETA DEL FORMULARIO AL ENVIARLO
-const registroForm = document.getElementById("formulario_cambio_contrasena");
+const validarForm = document.getElementById("formulario_cambio_contrasena");
 
-registroForm.setAttribute("novalidate", true);
+validarForm.setAttribute("novalidate", true);
 
-registroForm.addEventListener("submit", function (event) {
+validarForm.addEventListener("submit", function (event) {
 
     var validarPassword = validarCampo(
         passwordRegistro,

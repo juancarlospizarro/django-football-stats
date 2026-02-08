@@ -269,6 +269,7 @@
         <table id="tablaJugadores" class="table text-center table-bordered shadow-sm">
             <thead>
                 <tr>
+                    <th class="bg-success text-white text-center">Posición</th>
                     <th id="ordenarDorsal" class="bg-success text-white text-center">Dorsal</th>
                     <th id="ordenarJugador" class="bg-success text-white text-center">Jugador</th>
                     <th class="bg-success text-white text-center">Pierna</th>
@@ -283,6 +284,13 @@
             <tbody>
                 {% for relacion in jugadores_equipo %}
                 <tr class="align-middle">
+                    <td class="text-center text-secondary fw-bold" data-posicion="{% if relacion.perfil_jugador.get_posicion_display %}{{ relacion.perfil_jugador.get_posicion_display }}{% else %}--{% endif %}">
+                        {% if relacion.perfil_jugador.get_posicion_display %}
+                            {{ relacion.perfil_jugador.get_posicion_display }}
+                        {% else %}
+                            —
+                        {% endif %}
+                    </td>
                     <td class="text-center text-secondary fw-bold" data-dorsal="{% if relacion.perfil_jugador.dorsal %}{{ relacion.perfil_jugador.dorsal }}{% else %}0{% endif %}">
                         {% if relacion.perfil_jugador.dorsal %}
                             {{ relacion.perfil_jugador.dorsal }}

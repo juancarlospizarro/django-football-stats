@@ -65,6 +65,29 @@ class PerfilJugador(models.Model):
         default=PiernaHabil.DERECHA
     )
     
+    class Posicion(models.TextChoices):
+        PORTERO = 'portero', _('Portero')
+        LATERAL_DERECHO = 'lateral_derecho', _('Lateral Derecho')
+        DEFENSA_CENTRAL = 'defensa_central', _('Defensa Central')
+        LATERAL_IZQUIERDO = 'lateral_izquierdo', _('Lateral Izquierdo')
+        MEDIOCENTRO_DEFENSIVO = 'mediocentro_defensivo', _('Mediocentro Defensivo')
+        MEDIOCENTRO = 'mediocentro', _('Mediocentro')
+        MEDIOCENTRO_OFENSIVO = 'mediocentro_ofensivo', _('Mediocentro Ofensivo')
+        INTERIOR_IZQUIERDA = 'interior_izquierda', _('Interior Izquierda')
+        INTERIOR_DERECHA = 'interior_derecha', _('Interior Derecha')
+        EXTREMO_DERECHO = 'extremo_derecho', _('Extremo Derecho')
+        EXTREMO_IZQUIERDO = 'extremo_izquierdo', _('Extremo Izquierdo')
+        SEGUNDO_DELANTERO = 'segundo_delantero', _('Segundo Delantero')
+        DELANTERO_CENTRO = 'delantero_centro', _('Delantero Centro')
+    
+    posicion = models.CharField(
+        max_length=25,
+        choices=Posicion.choices,
+        null=True,
+        blank=True,
+        help_text="Posición en el equipo actual (asignada por el entrenador)"
+    )
+    
     es_capitan = models.BooleanField(_('es capitán'), default=False)
 
     def __str__(self):

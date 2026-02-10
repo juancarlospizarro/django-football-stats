@@ -27,7 +27,7 @@ load_dotenv()
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv("DEBUG", "False")
+DEBUG = os.getenv("DEBUG", "False").lower() == "true"
 
 
 ALLOWED_HOSTS_ENV = os.getenv("ALLOWED_HOSTS", "")
@@ -58,6 +58,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'football_stats_app.middleware.AdminAccessMiddleware',
 ]
 
 ROOT_URLCONF = 'football_stats_app.urls'

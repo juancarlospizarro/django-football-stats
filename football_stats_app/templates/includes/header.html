@@ -60,9 +60,9 @@
 
                     {# ===== ENTRENADOR ===== #}
                     {% if user.rol == "entrenador" %}
-                        {% if user.perfil_entrenador.equipos.all %}
+                        {% if user.perfil_entrenador.get_equipos_activos %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'equipos:informacion_equipo' slug=user.perfil_entrenador.equipos.first.equipo.slug %}">
+                            <a class="nav-link" href="{% url 'equipos:informacion_equipo' slug=user.perfil_entrenador.get_equipos_activos.0.equipo.slug %}">
                                 <i class="bi bi-shield-fill"></i> Equipo
                             </a>
                         </li>
@@ -76,9 +76,9 @@
 
                     {# ===== JUGADOR ===== #}
                     {% elif user.rol == "jugador" %}
-                        {% if user.perfil_jugador.equipos.all %}
+                        {% if user.perfil_jugador.get_equipos_activos %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'equipos:informacion_equipo' slug=user.perfil_jugador.equipos.first.equipo.slug %}">
+                            <a class="nav-link" href="{% url 'equipos:informacion_equipo' slug=user.perfil_jugador.get_equipos_activos.0.equipo.slug %}">
                                 <i class="bi bi-shield-fill"></i> Equipo
                             </a>
                         </li>

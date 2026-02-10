@@ -156,6 +156,20 @@ FutDataManager - {{ usuario_perfil.get_full_name }}
                                     <span class="fw-bold h5 text-dark mb-0">{{ usuario_perfil.perfil_jugador.get_pierna_habil_display|default:"--" }}</span>
                                 </div>
                             </div>
+
+                            <!-- Equipo Actual -->
+                            {% if usuario_perfil.tiene_equipo %}
+                            {% with equipo_actual=usuario_perfil.perfil_jugador.equipos.filter|first %}
+                            <div class="col-6 col-md-3">
+                                <a href="{% url 'equipos:informacion_equipo' equipo_actual.equipo.slug %}" class="text-decoration-none">
+                                    <div class="text-center p-3 bg-light rounded-3" style="cursor: pointer; transition: all 0.3s ease;">
+                                        <small class="d-block text-secondary mb-1">Equipo</small>
+                                        <span class="fw-bold h5 text-dark mb-0">{{ equipo_actual.equipo.nombre }}</span>
+                                    </div>
+                                </a>
+                            </div>
+                            {% endwith %}
+                            {% endif %}
                             
                             <!-- Capitán Badge -->
                             {% if usuario_perfil.perfil_jugador.es_capitan %}

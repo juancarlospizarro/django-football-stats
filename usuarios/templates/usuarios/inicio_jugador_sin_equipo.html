@@ -21,7 +21,46 @@
         <!-- Historial -->
         <div>
           <h2 class="h4 text-foot-green mb-2">Equipos donde ha jugado</h2>
-          <p class="fs-5 text-secondary mb-0">Listado de equipos donde ha jugado</p>
+          {% if equipos_historico %}
+            <table id="tablaEquiposHistorico" class="table text-center table-bordered shadow-sm">
+              <thead>
+                <tr>
+                  <th class="bg-success text-white text-center">Escudo</th>
+                  <th class="bg-success text-white text-center">Nombre</th>
+                  <th class="bg-success text-white text-center">Año de fundación</th>
+                  <th class="bg-success text-white text-center">Inicio</th>
+                  <th class="bg-success text-white text-center">Fin</th>
+                  <th class="bg-success"></th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for equipo_jugador in equipos_historico %}
+                <tr>
+                  {% if equipo_jugador.equipo.escudo %}
+                  <td><img src="{{ equipo_jugador.equipo.escudo.url }}" class="me-2" width="40" height="40"></td>
+                  {% else %}
+                  <td><img src="{% static 'img/default_shield.png' %}" class="me-2" width="40" height="40"></td>
+                  {% endif %}
+                  <td>{{ equipo_jugador.equipo.nombre }}</td>
+                  <td>{{ equipo_jugador.equipo.anio_fundacion }}</td>
+                  <td>{{ equipo_jugador.fecha_incorporacion|date:"d/m/Y" }}</td>
+                  <td>
+                    {% if equipo_jugador.fecha_salida %}
+                      {{ equipo_jugador.fecha_salida|date:"d/m/Y" }}
+                    {% else %}
+                      <span class="badge bg-primary">Activo</span>
+                    {% endif %}
+                  </td>
+                  <td><a class="nav-link text-decoration-none text-secondary"
+                      href="{% url 'equipos:informacion_equipo' equipo_jugador.equipo.slug %}"><i class="bi bi-eye-fill"></i>
+                      Ver equipo</a></td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          {% else %}
+            <p class="fs-5 text-secondary text-muted">No has jugado en ningún equipo aún.</p>
+          {% endif %}
         </div>
 
         <!-- Estadísticas -->

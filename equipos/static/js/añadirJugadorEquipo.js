@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Mostrar loading
             btn.disabled = true;
-            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Añadiendo...';
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Añadiendo jugador...';
 
             // Construir la URL usando la variable global
             const url = apiUrlAgregarJugador
@@ -39,6 +39,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     
                     setTimeout(() => {
                         bootstrap.Modal.getInstance(document.getElementById('addPlayerModal')).hide();
+                        // Recargar la página para ver los cambios
+                        location.reload();
                     }, 2000);
                 } else {
                     showAlert('danger', `✗ Error: ${data.error}`);

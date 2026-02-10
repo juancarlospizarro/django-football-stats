@@ -2,10 +2,12 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from usuarios.decorators import entrenador_o_admin_required
 from usuarios.models import PerfilJugador, Usuario, PerfilEntrenador
 from .models import Equipo, EquipoEntrenador, EquipoJugador
 
 @login_required
+@entrenador_o_admin_required
 def crear_equipo(request):
 
     usuario = request.user
@@ -89,6 +91,7 @@ def informacion_equipo(request, slug):
     return render(request, 'equipos/informacion_equipo.html', context)
 
 @login_required
+@entrenador_o_admin_required
 def editar_jugador(request, jugador_id):
     try:
         perfil_jugador = get_object_or_404(PerfilJugador, id=jugador_id)
@@ -112,6 +115,7 @@ def editar_jugador(request, jugador_id):
         altura = request.POST.get('altura')
         peso = request.POST.get('peso')
         pierna_habil = request.POST.get('pierna_habil')
+        posicion = request.POST.get('posicion')
         es_capitan = request.POST.get('es_capitan') == 'on'
         
         if dorsal and dorsal.strip():
@@ -122,6 +126,10 @@ def editar_jugador(request, jugador_id):
             perfil_jugador.peso = float(peso)
         if pierna_habil:
             perfil_jugador.pierna_habil = pierna_habil
+        if posicion:
+            perfil_jugador.posicion = posicion
+        else:
+            perfil_jugador.posicion = None
         
         perfil_jugador.es_capitan = es_capitan
         perfil_jugador.save()
@@ -129,6 +137,67 @@ def editar_jugador(request, jugador_id):
         return JsonResponse({
             'success': True,
             'message': 'Información actualizada correctamente'
+        })
+    
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)}, status=500)
+
+@login_required
+def eliminar_jugador_equipo(request, equipo_id, jugador_id):
+    """
+    Marca un jugador como inactivo en el equipo (mantiene histórico).
+    Solo el entrenador del equipo puede hacerlo.
+    """
+    try:
+        # Obtener el equipo y el jugador
+        equipo = get_object_or_404(Equipo, id=equipo_id)
+        perfil_jugador = get_object_or_404(PerfilJugador, id=jugador_id)
+        
+        # Verificar que el usuario es entrenador del equipo
+        es_entrenador = EquipoEntrenador.objects.filter(
+            perfil_entrenador=request.user.perfil_entrenador,
+            equipo=equipo,
+            es_activo=True
+        ).exists()
+        
+        if not es_entrenador:
+            return JsonResponse({'success': False, 'error': 'No tienes permiso'}, status=403)
+        
+        # Marcar la relación como inactiva en lugar de eliminar
+        equipo_jugador = EquipoJugador.objects.filter(
+            equipo=equipo,
+            perfil_jugador=perfil_jugador,
+            es_activo=True
+        ).first()
+        
+        if not equipo_jugador:
+            return JsonResponse({'success': False, 'error': 'El jugador no está activo en este equipo'}, status=404)
+        
+        # Marcar como inactivo y guardar la fecha de salida
+        from django.utils import timezone
+        equipo_jugador.es_activo = False
+        equipo_jugador.fecha_salida = timezone.now().date()
+        equipo_jugador.save()
+        
+        # Verificar si el jugador está activo en otros equipos
+        otros_equipos = EquipoJugador.objects.filter(
+            perfil_jugador=perfil_jugador,
+            es_activo=True
+        ).count()
+        
+        # Si no está en otros equipos activos, actualizar tiene_equipo
+        if otros_equipos == 0:
+            perfil_jugador.usuario.tiene_equipo = False
+            perfil_jugador.usuario.save()
+        
+        # Limpiar datos deportivos del equipo (dorsal y posición)
+        perfil_jugador.dorsal = None
+        perfil_jugador.posicion = None
+        perfil_jugador.save()
+        
+        return JsonResponse({
+            'success': True,
+            'message': f'{perfil_jugador.usuario.get_full_name()} eliminado del equipo'
         })
     
     except Exception as e:
@@ -151,26 +220,34 @@ def agregar_jugador_equipo(request, equipo_id, jugador_id):
         if not is_trainer:
             return JsonResponse({'success': False, 'error': 'No tienes permiso'}, status=403)
         
-        # Crear relación entre jugador y equipo
-        equipo_jugador, created = EquipoJugador.objects.get_or_create(
+        # Verificar si el jugador ya está ACTIVO en este equipo
+        ya_existe_activo = EquipoJugador.objects.filter(
             equipo=equipo,
-            perfil_jugador=perfil_jugador
-        )
+            perfil_jugador=perfil_jugador,
+            es_activo=True
+        ).exists()
         
-        if created:
-            # Actualizar el booleano tiene_equipo del usuario
-            perfil_jugador.usuario.tiene_equipo = True
-            perfil_jugador.usuario.save()
-            
-            return JsonResponse({
-                'success': True,
-                'message': f'{perfil_jugador.usuario.get_full_name()} añadido al equipo'
-            })
-        else:
+        if ya_existe_activo:
             return JsonResponse({
                 'success': False,
                 'error': 'El jugador ya está en este equipo'
             })
+        
+        # Crear nuevo registro (permite múltiples periodos)
+        equipo_jugador = EquipoJugador.objects.create(
+            equipo=equipo,
+            perfil_jugador=perfil_jugador,
+            es_activo=True
+        )
+        
+        # Actualizar el booleano tiene_equipo del usuario
+        perfil_jugador.usuario.tiene_equipo = True
+        perfil_jugador.usuario.save()
+        
+        return JsonResponse({
+            'success': True,
+            'message': f'{perfil_jugador.usuario.get_full_name()} añadido al equipo'
+        })
     
     return JsonResponse({'success': False, 'error': 'Método no permitido'}, status=405)
 
@@ -205,90 +282,11 @@ def editar_datos_equipo(request, equipo_id):
     return render(request, 'equipos/informacion_equipo.html', {'equipo': equipo})
 
 @login_required
-def eliminar_equipo(request, equipo_id):
+def abandonar_equipo(request, equipo_id):
     # Obtener el equipo y verificar que el usuario es el dueño (entrenador vinculado)
     equipo = get_object_or_404(Equipo, id=equipo_id)
     
     # Seguridad: Solo el entrenador del equipo puede borrarlo
     if request.user.perfil_entrenador.equipo != equipo:
-        messages.error(request, "No tienes permiso para eliminar este equipo.")
+        messages.error(request, "No tienes permiso para abandonar este equipo.")
         return redirect('landing')
-
-    # # --- CONFIGURACIÓN DE ESTRATEGIA ---
-    # # Pon esto en True para mantener histórico (Baja Lógica).
-    # # Pon esto en False para borrar definitivamente (si ves que el histórico te complica).
-    # GUARDAR_HISTORICO = False 
-
-    # if request.method == 'POST':
-    #     try:
-    #         nombre_equipo = equipo.nombre
-            
-    #         # --- 1. NOTIFICAR A LOS JUGADORES (Común a ambas estrategias) ---
-    #         # Obtenemos todos los jugadores del equipo antes de borrarlos/desvincularlos
-    #         jugadores = equipo.jugadores.all().select_related('usuario')
-            
-    #         for perfil in jugadores:
-    #             usuario_jugador = perfil.usuario
-    #             if usuario_jugador.email:
-    #                 asunto = f'Aviso: El equipo {nombre_equipo} ha sido disuelto'
-    #                 mensaje = f"""
-    #                 Hola {usuario_jugador.first_name},
-                    
-    #                 Te informamos que el entrenador ha eliminado el equipo "{nombre_equipo}".
-                    
-    #                 A partir de este momento, figuras en la plataforma como "Jugador sin equipo".
-    #                 Tu historial y estadísticas personales se mantienen, pero ya no estás vinculado a este club.
-                    
-    #                 Atentamente,
-    #                 El equipo de FutDataManager.
-    #                 """
-                    
-    #                 # Enviamos el correo (fail_silently=True evita que si un correo falla, se pare todo el proceso)
-    #                 try:
-    #                     send_mail(
-    #                         asunto,
-    #                         mensaje,
-    #                         settings.DEFAULT_FROM_EMAIL,
-    #                         [usuario_jugador.email],
-    #                         fail_silently=True
-    #                     )
-    #                 except Exception:
-    #                     pass # Si falla un correo, seguimos borrando el equipo
-
-    #         # --- 2. EJECUTAR EL BORRADO SEGÚN LA ESTRATEGIA ELEGIDA ---
-    #         if GUARDAR_HISTORICO:
-    #             # ESTRATEGIA A: Baja Lógica (Histórico)
-    #             # Requiere que el modelo Equipo tenga el campo: activo = models.BooleanField(default=True)
-    #             equipo.activo = False
-    #             # Opcional: Renombrar para liberar el nombre único y permitir crear otro igual
-    #             # equipo.nombre = f"{equipo.nombre} (Disuelto {equipo.id})" 
-    #             equipo.save()
-                
-    #             # Desvinculamos a los jugadores manualmente (ya que no se borra el objeto padre)
-    #             for perfil in jugadores:
-    #                 perfil.equipo = None
-    #                 perfil.save()
-    #         else:
-    #             # ESTRATEGIA B: Borrado Físico (Definitivo)
-    #             # Al borrar el equipo, los jugadores se desvinculan solos gracias a on_delete=models.SET_NULL
-    #             equipo.delete() 
-
-    #         # --- 3. ACTUALIZAR AL ENTRENADOR (Común a ambas) ---
-    #         request.user.tiene_equipo = False
-    #         request.user.save()
-            
-    #         # Limpiamos la relación del perfil del entrenador
-    #         request.user.perfil_entrenador.equipo = None
-    #         request.user.perfil_entrenador.save()
-
-    #         if GUARDAR_HISTORICO:
-    #             messages.success(request, f'El equipo "{nombre_equipo}" ha sido archivado en el histórico.')
-    #         else:
-    #             messages.success(request, f'El equipo "{nombre_equipo}" ha sido eliminado definitivamente.')
-            
-    #     except Exception as e:
-    #         messages.error(request, f"Ocurrió un error al procesar el equipo: {str(e)}")
-            
-    #     return redirect('landing')
-
-    # return redirect('landing')

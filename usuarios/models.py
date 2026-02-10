@@ -90,6 +90,10 @@ class PerfilJugador(models.Model):
     
     es_capitan = models.BooleanField(_('es capitán'), default=False)
 
+    def get_equipos_activos(self):
+        """Retorna solo los equipos donde el jugador está activo."""
+        return self.equipos.filter(es_activo=True)
+
     def __str__(self):
         return f"Perfil Jugador: {self.usuario.get_full_name()}"
 
@@ -106,6 +110,10 @@ class PerfilEntrenador(models.Model):
     
     licencia = models.CharField(_('número de licencia'), max_length=50, blank=True, null=True)
     experiencia_anos = models.PositiveIntegerField(_('años de experiencia'), default=0)
+
+    def get_equipos_activos(self):
+        """Retorna solo los equipos donde el entrenador está activo."""
+        return self.equipos.filter(es_activo=True)
 
     def __str__(self):
         return f"Perfil Entrenador: {self.usuario.get_full_name()}"

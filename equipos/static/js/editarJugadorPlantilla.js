@@ -9,16 +9,22 @@ $(document).ready(function() {
             const altura = button.dataset.altura;
             const peso = button.dataset.peso;
             const piernaHabil = button.dataset.piernaHabil;
+            const posicion = button.dataset.posicion;
             const esCapitan = button.dataset.esCapitan === 'True';
             const jugadorNombre = button.dataset.jugadorNombre;
+            
+            console.log('PESO desde button.dataset:', peso, 'tipo:', typeof peso);
             
             // Llenar el modal con los datos
             document.getElementById('jugadorIdInput').value = jugadorId;
             document.getElementById('dorsalInput').value = dorsal === '0' ? '' : dorsal;
             document.getElementById('alturaInput').value = altura || '';
-            document.getElementById('pesoInput').value = peso || '';
+            document.getElementById('pesoInput').value = peso ? parseFloat(peso) : '';
             document.getElementById('piernaHabilInput').value = piernaHabil || '';
+            document.getElementById('posicionInput').value = posicion || '';
             document.getElementById('esCapitanInput').checked = esCapitan;
+            
+            console.log('PESO asignado al input:', document.getElementById('pesoInput').value);
             
             // Actualizar el título con el nombre del jugador
             document.getElementById('editPlayerLabel').textContent = `✏️ Editar: ${jugadorNombre}`;

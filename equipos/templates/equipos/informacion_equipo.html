@@ -269,8 +269,8 @@
         <table id="tablaJugadores" class="table text-center table-bordered shadow-sm">
             <thead>
                 <tr>
-                    <th class="bg-success text-white text-center">Posición</th>
                     <th id="ordenarDorsal" class="bg-success text-white text-center">Dorsal</th>
+                    <th id="ordenarPosicion" class="bg-success text-white text-center">Posición</th>
                     <th id="ordenarJugador" class="bg-success text-white text-center">Jugador</th>
                     <th class="bg-success text-white text-center">Pierna</th>
                     <th id="ordenarAltura" class="bg-success text-white text-center">Altura (cm)</th>
@@ -284,16 +284,16 @@
             <tbody>
                 {% for relacion in jugadores_equipo %}
                 <tr class="align-middle">
-                    <td class="text-center text-secondary fw-bold" data-posicion="{% if relacion.perfil_jugador.get_posicion_display %}{{ relacion.perfil_jugador.get_posicion_display }}{% else %}--{% endif %}">
-                        {% if relacion.perfil_jugador.get_posicion_display %}
-                            {{ relacion.perfil_jugador.get_posicion_display }}
+                    <td class="text-center text-secondary fw-bold" data-dorsal="{% if relacion.perfil_jugador.dorsal %}{{ relacion.perfil_jugador.dorsal }}{% else %}0{% endif %}">
+                        {% if relacion.perfil_jugador.dorsal %}
+                            {{ relacion.perfil_jugador.dorsal }}
                         {% else %}
                             —
                         {% endif %}
                     </td>
-                    <td class="text-center text-secondary fw-bold" data-dorsal="{% if relacion.perfil_jugador.dorsal %}{{ relacion.perfil_jugador.dorsal }}{% else %}0{% endif %}">
-                        {% if relacion.perfil_jugador.dorsal %}
-                            {{ relacion.perfil_jugador.dorsal }}
+                    <td class="text-center text-secondary fw-bold" data-posicion="{% if relacion.perfil_jugador.get_posicion_display %}{{ relacion.perfil_jugador.get_posicion_display }}{% else %}--{% endif %}">
+                        {% if relacion.perfil_jugador.get_posicion_display %}
+                            {{ relacion.perfil_jugador.get_posicion_display }}
                         {% else %}
                             —
                         {% endif %}
@@ -348,9 +348,10 @@
                                 data-bs-target="#editPlayerModal"
                                 data-jugador-id="{{ relacion.perfil_jugador.id }}"
                                 data-dorsal="{% if relacion.perfil_jugador.dorsal %}{{ relacion.perfil_jugador.dorsal }}{% else %}0{% endif %}"
-                                data-altura="{{ relacion.perfil_jugador.altura }}"
-                                data-peso="{{ relacion.perfil_jugador.peso }}"
-                                data-pierna-habil="{{ relacion.perfil_jugador.pierna_habil }}"
+                                data-altura="{{ relacion.perfil_jugador.altura|default:'' }}"
+                                data-peso="{{ relacion.perfil_jugador.peso|default:'' }}"
+                                data-pierna-habil="{{ relacion.perfil_jugador.pierna_habil|default:'' }}"
+                                data-posicion="{{ relacion.perfil_jugador.posicion|default:'' }}"
                                 data-es-capitan="{{ relacion.perfil_jugador.es_capitan }}"
                                 data-jugador-nombre="{{ relacion.perfil_jugador.usuario.get_full_name }}">
                                 <i class="bi bi-pencil-fill"></i> Editar
@@ -389,7 +390,7 @@
 
         <button type="button" class="btn text-white px-4 py-2 rounded-3 border-0"
             style="background-color: #504847;" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">
-            <i class="bi bi-shield-slash-fill"></i> Eliminar equipo
+            <i class="bi bi-shield-slash-fill"></i> Abandonar equipo
         </button>
     </div>
     {% endif %}
@@ -402,7 +403,6 @@
                 <h5 class="modal-title fw-bold" id="editPlayerLabel" style="color: #27a770;">
                     <i class="bi bi-pencil-fill"></i> Editar información del jugador
                 </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
 
             <div class="modal-body p-4">
@@ -429,6 +429,28 @@
                                 <option value="ambas">Ambas</option>
                             </select>
                             <small id="errorPiernaHabil" class="help-text text-danger" aria-live="polite"></small>
+                        </div>
+
+                        <!-- Posición -->
+                        <div class="col-md-6">
+                            <label for="posicionInput" class="form-label fw-medium">Posición</label>
+                            <select class="form-select rounded-3" id="posicionInput" name="posicion">
+                                <option value="">No tiene posición</option>
+                                <option value="portero">Portero</option>
+                                <option value="lateral_derecho">Lateral Derecho</option>
+                                <option value="defensa_central">Defensa Central</option>
+                                <option value="lateral_izquierdo">Lateral Izquierdo</option>
+                                <option value="mediocentro_defensivo">Mediocentro Defensivo</option>
+                                <option value="mediocentro">Mediocentro</option>
+                                <option value="mediocentro_ofensivo">Mediocentro Ofensivo</option>
+                                <option value="interior_izquierda">Interior Izquierda</option>
+                                <option value="interior_derecha">Interior Derecha</option>
+                                <option value="extremo_derecho">Extremo Derecho</option>
+                                <option value="extremo_izquierdo">Extremo Izquierdo</option>
+                                <option value="delantero_centro">Delantero Centro</option>
+                                <option value="segundo_delantero">Segundo Delantero</option>
+                            </select>
+                            <small id="errorPosicion" class="help-text text-danger" aria-live="polite"></small>
                         </div>
 
                         <!-- Altura -->
@@ -471,6 +493,32 @@
     </div>
 </div>
 
+<!-- MODAL DE CONFIRMACIÓN PARA ELIMINAR JUGADOR -->
+<div class="modal fade" id="confirmRemovePlayerModal" tabindex="-1" aria-labelledby="confirmRemovePlayerLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4 border-0 shadow">
+            <div class="modal-header border-bottom border-danger">
+                <h5 class="modal-title fw-bold text-danger" id="confirmRemovePlayerLabel">
+                    <i class="bi bi-exclamation-triangle-fill"></i> Confirmación
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body p-4">
+                <p class="mb-0">Esta acción <strong>no se puede deshacer</strong>. ¿Estás seguro de que quieres eliminar al jugador?</p>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light text-secondary px-4 rounded-3"
+                    data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-danger px-4 rounded-3" id="confirmRemovePlayerBtn">
+                    <i class="bi bi-trash-fill"></i> Sí, eliminar jugador
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- MODAL PARA AÑADIR JUGADOR -->
 <div class="modal fade" id="addPlayerModal" tabindex="-1" aria-labelledby="addPlayerLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -479,7 +527,6 @@
                 <h5 class="modal-title fw-bold" id="addPlayerLabel" style="color: #27a770;">
                     <i class="bi bi-person-plus-fill"></i> Añadir jugador al equipo
                 </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
 
             <div class="modal-body p-4">
@@ -534,15 +581,15 @@
                             <div class="modal-content rounded-4">
 
                                 <div class="modal-header">
-                                    <h5 class="modal-title text-danger"><i class="bi bi-shield-slash-fill"></i> Eliminar
+                                    <h5 class="modal-title text-danger"><i class="bi bi-shield-slash-fill"></i> Abandonar
                                         equipo</h5>
                                 </div>
 
                                 <div class="modal-body">
                                     <p>
                                         ⚠️ Esta acción <strong>no se puede deshacer</strong>.<br>
-                                        ¿Estás seguro de que quieres eliminar el equipo actual?
-                                        Tanto los jugadores como tú os quedaréis sin equipo.
+                                        ¿Estás seguro de que quieres abandonar el equipo actual?
+                                        Quedarás sin equipo y el capitán más antiguo será asignado automáticamente como entrenador interino.
                                     </p>
                                 </div>
 
@@ -552,8 +599,8 @@
                                     </button>
 
                                     <button class="btn btn-danger" id="confirmDeleteBtn"
-                                        data-url="{% url 'usuarios:eliminar_cuenta' %}">
-                                        Sí, eliminar equipo
+                                        data-url="{% url 'equipos:abandonar_equipo' %}">
+                                        Sí, abandonar equipo
                                     </button>
                                 </div>
 
@@ -565,8 +612,8 @@
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content rounded-4 text-center p-4">
 
-                                <h5 class="text-success mb-3">Cuenta eliminada</h5>
-                                <p>Tu cuenta ha sido eliminada correctamente.</p>
+                                <h5 class="text-success mb-3">Equipo abandonado</h5>
+                                <p>Has abandonado el equipo correctamente.</p>
 
                             </div>
                         </div>
@@ -645,9 +692,11 @@
     <script>
         const apiUrlAgregarJugador = "{% url 'equipos:agregar_jugador_equipo' 999 888 %}".replace('/999/888/', '/{equipo_id}/{jugador_id}/');
         const apiUrlEditarJugador = "{% url 'equipos:editar_jugador' 999 %}".replace('/999/', '/{jugador_id}/');
+        const apiUrlEliminarJugador = "{% url 'equipos:eliminar_jugador_equipo' 999 888 %}".replace('/999/888/', '/{equipo_id}/{jugador_id}/');
     </script>
     <script src="{% static 'js/editarDatosEquipo.js' %}"></script>
     <script src="{% static 'js/añadirJugadorEquipo.js' %}"></script>
     <script src="{% static 'js/listadoJugadoresPlantilla.js' %}"></script>
     <script src="{% static 'js/editarJugadorPlantilla.js' %}"></script>
+    <script src="{% static 'js/eliminarJugadorEquipo.js' %}"></script>
     {% endblock %}

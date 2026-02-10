@@ -24,8 +24,17 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.landing, name="landing"),
     path('auth/', include('usuarios.urls')),
-    path('teams/', include('equipos.urls'))
+    path('teams/', include('equipos.urls')),
+    path("test-400/", views.error_400_test),
+    path("test-403/", views.error_403_test),
+    path("test-500/", views.error_500_test),
 ]
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+# Vistas personalizadas de error
+handler404 = 'football_stats_app.views.error_404'
+handler500 = 'football_stats_app.views.error_500'
+handler403 = 'football_stats_app.views.error_403'
+handler400 = 'football_stats_app.views.error_400'

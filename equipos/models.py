@@ -118,6 +118,12 @@ class EquipoJugador(models.Model):
         verbose_name="Fecha de incorporación"
     )
     
+    fecha_salida = models.DateField(
+        null=True,
+        blank=True,
+        verbose_name="Fecha de salida"
+    )
+    
     es_activo = models.BooleanField(
         default=True,
         verbose_name="¿Está activo en el equipo?"
@@ -126,8 +132,7 @@ class EquipoJugador(models.Model):
     class Meta:
         verbose_name = "Equipo - Jugador"
         verbose_name_plural = "Equipos - Jugadores"
-        unique_together = ('equipo', 'perfil_jugador')
-        ordering = ['equipo', 'perfil_jugador']
+        ordering = ['-fecha_incorporacion', 'equipo', 'perfil_jugador']
 
     def __str__(self):
         return f"{self.perfil_jugador.usuario.get_full_name()} en {self.equipo.nombre}"
@@ -156,6 +161,12 @@ class EquipoEntrenador(models.Model):
         verbose_name="Fecha de incorporación"
     )
     
+    fecha_salida = models.DateField(
+        null=True,
+        blank=True,
+        verbose_name="Fecha de salida"
+    )
+    
     es_activo = models.BooleanField(
         default=True,
         verbose_name="¿Está activo en el equipo?"
@@ -164,8 +175,7 @@ class EquipoEntrenador(models.Model):
     class Meta:
         verbose_name = "Equipo - Entrenador"
         verbose_name_plural = "Equipos - Entrenadores"
-        unique_together = ('equipo', 'perfil_entrenador')
-        ordering = ['equipo', 'perfil_entrenador']
+        ordering = ['-fecha_incorporacion', 'equipo', 'perfil_entrenador']
 
     def __str__(self):
         return f"{self.perfil_entrenador.usuario.get_full_name()} en {self.equipo.nombre}"

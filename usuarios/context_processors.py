@@ -1,5 +1,6 @@
 from django.urls import resolve, reverse
 from equipos.models import Equipo
+from usuarios.models import Usuario
 
 def breadcrumbs(request):
     """
@@ -56,6 +57,21 @@ def breadcrumbs(request):
         elif view_name == "new_password_done":
             crumbs.append({"name": "Nueva contraseña", "url": reverse("usuarios:new_password_done")})
 
+        elif view_name == "ver_perfil_usuario":
+            slug = kwargs.get("slug")
+
+            if slug:
+                usuario = Usuario.objects.get(slug=slug)
+
+                crumbs.append({
+                    "name": "Usuarios",
+                })
+
+                crumbs.append({
+                    "name": usuario.get_full_name(),
+                    "url": reverse("usuarios:ver_perfil_usuario", args=[slug])
+                })
+
         elif view_name == "informacion_equipo":
             slug = kwargs.get("slug")
 
@@ -76,3 +92,4 @@ def breadcrumbs(request):
         pass
 
     return {"breadcrumbs": crumbs}
+
